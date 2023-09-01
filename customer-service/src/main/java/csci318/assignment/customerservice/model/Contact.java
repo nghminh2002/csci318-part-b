@@ -1,7 +1,5 @@
 package csci318.assignment.customerservice.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,7 +25,6 @@ public class Contact {
     private String position;
 
     @OneToOne(mappedBy = "contact")
-    @JsonIgnore
     private Customer customer;
 
     public Long getId() {

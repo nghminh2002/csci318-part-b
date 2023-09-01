@@ -1,5 +1,7 @@
 package csci318.assignment.customerservice.controller;
 
+import csci318.assignment.customerservice.controller.dto.CustomerResponseDTO;
+import csci318.assignment.customerservice.controller.dto.CustomerRequestDTO;
 import csci318.assignment.customerservice.model.Contact;
 import csci318.assignment.customerservice.model.Customer;
 import csci318.assignment.customerservice.service.CustomerService;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/customer")
@@ -25,55 +28,114 @@ public class CustomerController {
 
 //    Use case: Create customer
     @PostMapping()
-    public Customer createCustomer(@RequestBody Customer newCustomer) {
-        return customerService.createCustomer(newCustomer);
+    public CustomerResponseDTO createCustomer(@RequestBody CustomerRequestDTO request) {
+        Customer customer = new Customer();
+        customer.setCompanyName(request.getCompanyName());
+        customer.setAddress(request.getAddress());
+        customer.setCountry(request.getCountry());
+        Customer newCustomer = customerService.createCustomer(customer);
+
+        Contact contact = new Contact();
+        contact.setName(request.getContactName());
+        contact.setPhone(request.getContactPhone());
+        contact.setEmail(request.getContactEmail());
+        contact.setPosition(request.getContactPosition());
+        Contact newContact = customerService.createContact(contact);
+
+        newCustomer.setContact(newContact);
+        customerService.updateCustomer(newCustomer);
+
+        return new CustomerResponseDTO(newCustomer);
     }
 
 //    Use case: Update customer name, address, country
     @PutMapping("/{customerId}")
-    public Customer updateCustomer(@PathVariable Long customerId, @RequestBody Customer customer) {
-        return customerService.updateCustomerById(customerId, customer);
+    public CustomerResponseDTO updateCustomer(@PathVariable Long customerId, @RequestBody CustomerRequestDTO request) {
+        // 1. Find existing customer
+        Customer existingCustomer = customerService.getCustomerById(customerId);
+
+        // 2. Check if the company name needs to be updated
+        // If yes, replace old company with the new company name
+        if (request.getCompanyName() != null) {
+            existingCustomer.setCompanyName(request.getCompanyName());
+        }
+
+        // 3. Check if the address needs to be updated
+        // If yes, replace old address with the new address
+        if (request.getAddress() != null) {
+            existingCustomer.setAddress(request.getAddress());
+        }
+
+        // 4. Check if the country needs to be updated
+        // If yes, replace old country with the new country
+        if (request.getCountry() != null) {
+            existingCustomer.setCountry(request.getCountry());
+        }
+
+        // 5. Find existing customer's contact
+        Contact existingContact = customerService.getContactById(existingCustomer.getContact().getId());
+
+        // 6. Check if the name needs to be updated
+        // If yes, replace old name with the new name
+        if (request.getContactName() != null) {
+            existingContact.setName(request.getContactName());
+        }
+
+        // 7. Check if the phone needs to be updated
+        // If yes, replace old phone with the new phone
+        if (request.getContactPhone() != null) {
+            existingContact.setPhone(request.getContactPhone());
+        }
+
+        // 8. Check if the email needs to be updated
+        // If yes, replace old email with the new email
+        if (request.getContactEmail() != null) {
+            existingContact.setEmail(request.getContactEmail());
+        }
+
+        // 9. Check if the position needs to be updated
+        // If yes, replace old position with the new position
+        if (request.getContactPosition() != null) {
+            existingContact.setPosition(request.getContactPosition());
+        }
+
+        //10. Save updated customer and contact to database
+        Customer updatedCustomer =  customerService.updateCustomer(existingCustomer);
+        customerService.updateContact(existingContact);
+
+        return new CustomerResponseDTO(updatedCustomer);
     }
 
 //    Use case: Map customer to contact
     @PutMapping("/{customerId}/contact/{contactId}")
-    public Customer updateCustomerContact(@PathVariable Long customerId, @PathVariable Long contactId) {
-        return customerService.updateCustomerContact(customerId, contactId);
+    public CustomerResponseDTO updateCustomerContact(@PathVariable Long customerId, @PathVariable Long contactId) {
+        Customer updatedCustomer =  customerService.updateCustomerContact(customerId, contactId);
+        return new CustomerResponseDTO(updatedCustomer);
     }
 
 //    Use case: Get customer by id
-    @GetMapping("/{id}")
-    Customer getCustomer(@PathVariable Long id) {
-        return customerService.getCustomerById(id);
+    @GetMapping("/{customerId}")
+    CustomerResponseDTO getCustomer(@PathVariable Long customerId) {
+        Customer existingCustomer = customerService.getCustomerById(customerId);
+        return new CustomerResponseDTO(existingCustomer);
     }
 
 //    Use case: Get all customers
     @GetMapping()
-    List<Customer> getAllCustomers() {
-        return customerService.getAllCustomers();
-    }
-
-//    Use case: Create contact
-    @PostMapping("/contact")
-    public Contact createContact(@RequestBody Contact newContact) {
-        return customerService.createContact(newContact);
-    }
-
-//    Use case: Update contact for customer by id
-    @PutMapping("/contact/{id}")
-    public Contact updateContact(@PathVariable Long id, @RequestBody Contact contact) {
-        return customerService.updateContact(id, contact);
+    List<CustomerResponseDTO> getAllCustomers() {
+        return customerService.getAllCustomers().stream().map(CustomerResponseDTO::new).collect(Collectors.toList());
     }
 
 //    Use case: Get contact by id
     @GetMapping("/contact/{id}")
-    Contact getContact(@PathVariable Long id) {
-        return customerService.getContactById(id);
+    CustomerResponseDTO getContact(@PathVariable Long id) {
+        Contact existingContact = customerService.getContactById(id);
+        return new CustomerResponseDTO(existingContact);
     }
 
 //    Use case: Get all contacts
     @GetMapping("/contact")
-    List<Contact> getAllContacts() {
-        return customerService.getAllContacts();
+    List<CustomerResponseDTO> getAllContacts() {
+        return customerService.getAllContacts().stream().map(CustomerResponseDTO::new).collect(Collectors.toList());
     }
 }
