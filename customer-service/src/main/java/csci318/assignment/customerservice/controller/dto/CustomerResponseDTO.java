@@ -7,10 +7,10 @@ public class CustomerResponseDTO {
     private final String companyName;
     private final String address;
     private final String country;
-    private final String contactName;
-    private final String contactPhone;
-    private final String contactEmail;
-    private final String contactPosition;
+    private final String name;
+    private final String phone;
+    private final String email;
+    private final String position;
 
     public CustomerResponseDTO(Customer customer) {
         this.companyName = customer.getCompanyName();
@@ -18,17 +18,17 @@ public class CustomerResponseDTO {
         this.country = customer.getCountry();
 
         Contact contact = customer.getContact();
-        this.contactName = contact.getName();
-        this.contactPhone = contact.getPhone();
-        this.contactEmail = contact.getEmail();
-        this.contactPosition = contact.getPosition();
+        this.name = contact.getName();
+        this.phone = contact.getPhone();
+        this.email = contact.getEmail();
+        this.position = contact.getPosition();
     }
 
     public CustomerResponseDTO(Contact contact) {
-        this.contactName = contact.getName();
-        this.contactPhone = contact.getPhone();
-        this.contactEmail = contact.getEmail();
-        this.contactPosition = contact.getPosition();
+        this.name = contact.getName();
+        this.phone = contact.getPhone();
+        this.email = contact.getEmail();
+        this.position = contact.getPosition();
 
         Customer customer = contact.getCustomer();
         this.companyName = customer.getCompanyName();

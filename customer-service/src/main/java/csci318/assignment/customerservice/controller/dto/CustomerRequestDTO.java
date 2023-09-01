@@ -4,10 +4,10 @@ public class CustomerRequestDTO {
     private String companyName;
     private String address;
     private String country;
-    private String contactName;
-    private String contactPhone;
-    private String contactEmail;
-    private String contactPosition;
+    private String name;
+    private String phone;
+    private String email;
+    private String position;
 
     public String getCompanyName() {
         return companyName;
@@ -21,19 +21,19 @@ public class CustomerRequestDTO {
         return country;
     }
 
-    public String getContactName() {
-        return contactName;
+    public String getName() {
+        return name;
     }
 
-    public String getContactPhone() {
-        return contactPhone;
+    public String getPhone() {
+        return phone;
     }
 
-    public String getContactEmail() {
-        return contactEmail;
+    public String getEmail() {
+        return email;
     }
 
-    public String getContactPosition() {
-        return contactPosition;
+    public String getPosition() {
+        return position;
     }
 }

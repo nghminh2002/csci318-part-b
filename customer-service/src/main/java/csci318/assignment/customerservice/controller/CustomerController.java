@@ -36,10 +36,10 @@ public class CustomerController {
         Customer newCustomer = customerService.createCustomer(customer);
 
         Contact contact = new Contact();
-        contact.setName(request.getContactName());
-        contact.setPhone(request.getContactPhone());
-        contact.setEmail(request.getContactEmail());
-        contact.setPosition(request.getContactPosition());
+        contact.setName(request.getName());
+        contact.setPhone(request.getPhone());
+        contact.setEmail(request.getEmail());
+        contact.setPosition(request.getPosition());
         Contact newContact = customerService.createContact(contact);
 
         newCustomer.setContact(newContact);
@@ -77,26 +77,26 @@ public class CustomerController {
 
         // 6. Check if the name needs to be updated
         // If yes, replace old name with the new name
-        if (request.getContactName() != null) {
-            existingContact.setName(request.getContactName());
+        if (request.getName() != null) {
+            existingContact.setName(request.getName());
         }
 
         // 7. Check if the phone needs to be updated
         // If yes, replace old phone with the new phone
-        if (request.getContactPhone() != null) {
-            existingContact.setPhone(request.getContactPhone());
+        if (request.getPhone() != null) {
+            existingContact.setPhone(request.getPhone());
         }
 
         // 8. Check if the email needs to be updated
         // If yes, replace old email with the new email
-        if (request.getContactEmail() != null) {
-            existingContact.setEmail(request.getContactEmail());
+        if (request.getEmail() != null) {
+            existingContact.setEmail(request.getEmail());
         }
 
         // 9. Check if the position needs to be updated
         // If yes, replace old position with the new position
-        if (request.getContactPosition() != null) {
-            existingContact.setPosition(request.getContactPosition());
+        if (request.getPosition() != null) {
+            existingContact.setPosition(request.getPosition());
         }
 
         //10. Save updated customer and contact to database

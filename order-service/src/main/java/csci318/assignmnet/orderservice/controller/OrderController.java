@@ -2,7 +2,9 @@ package csci318.assignmnet.orderservice.controller;
 
 import csci318.assignmnet.orderservice.controller.dto.OrderRequestDTO;
 import csci318.assignmnet.orderservice.controller.dto.OrderResponseDTO;
+import csci318.assignmnet.orderservice.model.Customer;
 import csci318.assignmnet.orderservice.model.Order;
+import csci318.assignmnet.orderservice.model.Product;
 import csci318.assignmnet.orderservice.service.OrderService;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,7 +30,9 @@ public class OrderController {
         order.setSupplier(request.getSupplier());
         order.setQuantity(request.getQuantity());
         Order newOrder = orderService.createOrder(order);
-        return new OrderResponseDTO(newOrder);
+        Customer customer = orderService.getOrderSupplier(request.getSupplier());
+        Product product = orderService.getOrderProduct(request.getProduct());
+        return new OrderResponseDTO(newOrder, customer, product);
     }
 
 //    Use case: Update order
@@ -57,6 +61,8 @@ public class OrderController {
 
         // 5. Save updated order into the database
         Order updatedOrder = orderService.updateOrder(existingOrder);
-        return new OrderResponseDTO(updatedOrder);
+        Customer customer = orderService.getOrderSupplier(request.getSupplier());
+        Product product = orderService.getOrderProduct(request.getProduct());
+        return new OrderResponseDTO(updatedOrder, customer, product);
     }
 }
