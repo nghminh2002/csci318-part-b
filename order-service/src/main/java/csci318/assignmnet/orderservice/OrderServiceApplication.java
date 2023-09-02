@@ -26,6 +26,7 @@ public class OrderServiceApplication {
         return args -> {
             // Order example 1
             Order order1 = new Order();
+            order1.setId(1L);
             order1.setProduct(1L);
             order1.setSupplier(1L);
             order1.setQuantity(10);
@@ -34,17 +35,19 @@ public class OrderServiceApplication {
 
             // Order example 2
             Order order2 = new Order();
+            order2.setId(2L);
             order2.setProduct(1L);
             order2.setSupplier(3L);
-            order2.setQuantity(10);
+            order2.setQuantity(100);
             Order savedOrder2 = orderRepository.save(order2);
             System.out.println(savedOrder2);
 
             // Order example 2
             Order order3 = new Order();
+            order3.setId(3L);
             order3.setProduct(3L);
             order3.setSupplier(3L);
-            order3.setQuantity(10);
+            order3.setQuantity(1);
             Order savedOrder3 = orderRepository.save(order3);
             System.out.println(savedOrder3);
         };

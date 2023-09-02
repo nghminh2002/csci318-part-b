@@ -21,12 +21,14 @@ public class CustomerServiceApplication {
         return args -> {
             // Customer and contact example 1
             Customer customer1 = new Customer();
+            customer1.setId(1L);
             customer1.setCompanyName("Company A");
             customer1.setAddress("Liverpool, South Western Sydney");
             customer1.setCountry("Australia");
             Customer savedCustomer1 = customerRepository.save(customer1);
 
             Contact contact1 = new Contact();
+            contact1.setId(2L);
             contact1.setName("Hue Minh Nguyen");
             contact1.setPhone("0123456789");
             contact1.setEmail("hmn998@uowmail.edu.au");
@@ -39,12 +41,14 @@ public class CustomerServiceApplication {
 
             // Customer and contact example 2
             Customer customer2 = new Customer();
+            customer2.setId(3L);
             customer2.setCompanyName("Company B");
             customer2.setAddress("Auckland");
             customer2.setCountry("New Zealand");
             Customer savedCustomer2 = customerRepository.save(customer2);
 
             Contact contact2 = new Contact();
+            contact2.setId(4L);
             contact2.setName("Nguyen Hue Minh");
             contact2.setPhone("0987654321");
             contact2.setEmail("hmn998@gmail.com");
