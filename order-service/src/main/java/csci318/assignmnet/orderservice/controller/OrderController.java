@@ -7,7 +7,7 @@ import csci318.assignmnet.orderservice.model.Order;
 import csci318.assignmnet.orderservice.model.Product;
 import csci318.assignmnet.orderservice.service.OrderService;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,7 +37,7 @@ public class OrderController {
     }
 
 //    Use case: Update order
-    @PatchMapping("/{orderId}")
+    @PutMapping("/{orderId}")
     public OrderResponseDTO updateOrder(@PathVariable Long orderId, @RequestBody OrderRequestDTO request) {
         // 1. Find existing order
         Order existingOrder = orderService.getOrderById(orderId);
@@ -68,7 +68,10 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}")
-    public Order getOrderById(@PathVariable Long orderId) {
-        return orderService.getOrderById(orderId);
+    public OrderResponseDTO getOrderById(@PathVariable Long orderId) {
+        Order order = orderService.getOrderById(orderId);
+        Customer customer = orderService.getOrderSupplier(order.getSupplier());
+        Product product = orderService.getOrderProduct(order.getProduct());
+        return new OrderResponseDTO(order, customer, product);
     }
 }

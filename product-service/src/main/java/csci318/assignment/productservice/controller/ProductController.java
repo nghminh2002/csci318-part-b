@@ -2,6 +2,7 @@ package csci318.assignment.productservice.controller;
 
 import csci318.assignment.productservice.controller.dto.ProductDetailRequestDTO;
 import csci318.assignment.productservice.controller.dto.ProductDetailResponseDTO;
+import csci318.assignment.productservice.controller.dto.ProductOrderListResponseDTO;
 import csci318.assignment.productservice.controller.dto.ProductRequestDTO;
 import csci318.assignment.productservice.controller.dto.ProductResponseDTO;
 import csci318.assignment.productservice.model.Order;
@@ -10,6 +11,7 @@ import csci318.assignment.productservice.model.ProductDetail;
 import csci318.assignment.productservice.service.ProductService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -124,7 +126,7 @@ public class ProductController {
     }
 
 //    Use case: Map product detail to product
-    @PatchMapping("/{productId}/detail/{detailId}")
+    @PutMapping("/{productId}/detail/{detailId}")
     public ProductResponseDTO updateProductProductDetail(@PathVariable Long productId, @PathVariable Long detailId) {
         Product updatedProduct = productService.updateProductProductDetail(productId, detailId);
         return new ProductResponseDTO(updatedProduct);
@@ -145,8 +147,10 @@ public class ProductController {
 
     //    Use case: Get all products
     @GetMapping("/{productId}/all-orders")
-    List<Order> getAllOrdersHavingProduct(@PathVariable Long productId) {
-        return productService.getAllOrdersHavingProduct(productId);
+    ProductOrderListResponseDTO getAllOrdersHavingProduct(@PathVariable Long productId) {
+        Product existingProduct = productService.getProduct(productId);
+        List<Order> createdOrders = productService.getAllOrdersHavingProduct(productId);
+        return new ProductOrderListResponseDTO(existingProduct, createdOrders);
     }
 
 //    Use case: Create product detail

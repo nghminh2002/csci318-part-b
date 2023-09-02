@@ -66,4 +66,15 @@ public class Customer {
     public void setContact(Contact contact) {
         this.contact = contact;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id=" + id +
+                ", companyName='" + companyName + '\'' +
+                ", address='" + address + '\'' +
+                ", country='" + country + '\'' +
+                ", contact=" + contact.toString() +
+                '}';
+    }
 }

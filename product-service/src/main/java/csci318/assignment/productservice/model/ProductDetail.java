@@ -55,4 +55,13 @@ public class ProductDetail {
     public void setProduct(Product product) {
         this.product = product;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", comment='" + comment + '\'' +
+                '}';
+    }
 }

@@ -82,4 +82,15 @@ public class Product {
     public void addCreatedOrders(Long orderId) {
         this.createdOrders.add(orderId);
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id=" + id +
+                ", productCategory='" + productCategory + '\'' +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", productDetail=" + productDetail.toString() +
+                '}';
+    }
 }

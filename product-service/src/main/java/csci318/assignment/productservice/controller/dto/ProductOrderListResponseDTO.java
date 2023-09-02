@@ -1,10 +1,13 @@
 package csci318.assignment.productservice.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import csci318.assignment.productservice.model.Order;
 import csci318.assignment.productservice.model.Product;
 import csci318.assignment.productservice.model.ProductDetail;
 
-public class ProductResponseDTO {
+import java.util.List;
+
+public class ProductOrderListResponseDTO {
     @JsonProperty
     private final String productCategory;
 
@@ -20,7 +23,10 @@ public class ProductResponseDTO {
     @JsonProperty
     private final String comment;
 
-    public ProductResponseDTO(Product product) {
+    @JsonProperty
+    private final List<Order> orderList;
+
+    public ProductOrderListResponseDTO(Product product, List<Order> orderList) {
         this.productCategory = product.getProductCategory();
         this.name = product.getName();
         this.price = product.getPrice();
@@ -28,6 +34,8 @@ public class ProductResponseDTO {
         ProductDetail productDetail = product.getProductDetail();
         this.description = productDetail.getDescription();
         this.comment = productDetail.getComment();
+
+        this.orderList = orderList;
     }
 
     public String getProductCategory() {
@@ -48,5 +56,9 @@ public class ProductResponseDTO {
 
     public String getComment() {
         return comment;
+    }
+
+    public List<Order> getOrderList() {
+        return orderList;
     }
 }

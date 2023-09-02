@@ -53,4 +53,14 @@ public class Order {
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id=" + id +
+                ", supplier=" + supplier +
+                ", product=" + product +
+                ", quantity=" + quantity +
+                '}';
+    }
 }

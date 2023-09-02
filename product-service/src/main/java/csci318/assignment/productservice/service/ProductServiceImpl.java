@@ -68,7 +68,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Order> getAllOrdersHavingProduct(Long productId) {
-        final String url = "http://localhost:8082/order/";
+        final String url = "http://localhost:8082/order/internal/";
         List<Order> orders = new ArrayList<>();
         List<Long> ids = productRepository.findById(productId).orElseThrow(RuntimeException::new)
                 .getCreatedOrders();
