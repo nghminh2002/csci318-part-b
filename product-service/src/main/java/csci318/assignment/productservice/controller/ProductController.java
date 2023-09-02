@@ -4,13 +4,14 @@ import csci318.assignment.productservice.controller.dto.ProductDetailRequestDTO;
 import csci318.assignment.productservice.controller.dto.ProductDetailResponseDTO;
 import csci318.assignment.productservice.controller.dto.ProductRequestDTO;
 import csci318.assignment.productservice.controller.dto.ProductResponseDTO;
+import csci318.assignment.productservice.model.Order;
 import csci318.assignment.productservice.model.Product;
 import csci318.assignment.productservice.model.ProductDetail;
 import csci318.assignment.productservice.service.ProductService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,7 +52,7 @@ public class ProductController {
     }
 
 //    Use case: Update product category, name and price
-    @PutMapping("/{productId}")
+    @PatchMapping("/{productId}")
     public ProductResponseDTO updateProduct(@PathVariable Long productId, @RequestBody ProductRequestDTO request) {
         // 1. Find existing product
         Product existingProduct = productService.getProduct(productId);
@@ -74,7 +75,11 @@ public class ProductController {
             existingProduct.setPrice(request.getPrice());
         }
 
-        // 4. Check if the product detail needs to be updated
+        if (request.getOrderId() != null) {
+            existingProduct.addCreatedOrders(request.getOrderId());
+        }
+
+        // 5. Check if the product detail needs to be updated
         if (request.getComment() != null || request.getDescription() != null) {
 
             // 4.1. Check if this product has already had product detail
@@ -112,14 +117,14 @@ public class ProductController {
             productService.updateProductDetail(existingProductDetail);
         }
 
-        // 5. Update product
+        // 6. Update product
         Product updatedProduct = productService.updateProduct(existingProduct);
 
         return new ProductResponseDTO(updatedProduct);
     }
 
 //    Use case: Map product detail to product
-    @PutMapping("/{productId}/detail/{detailId}")
+    @PatchMapping("/{productId}/detail/{detailId}")
     public ProductResponseDTO updateProductProductDetail(@PathVariable Long productId, @PathVariable Long detailId) {
         Product updatedProduct = productService.updateProductProductDetail(productId, detailId);
         return new ProductResponseDTO(updatedProduct);
@@ -138,6 +143,12 @@ public class ProductController {
         return productService.getAllProducts().stream().map(ProductResponseDTO::new).collect(Collectors.toList());
     }
 
+    //    Use case: Get all products
+    @GetMapping("/{productId}/all-orders")
+    List<Order> getAllOrdersHavingProduct(@PathVariable Long productId) {
+        return productService.getAllOrdersHavingProduct(productId);
+    }
+
 //    Use case: Create product detail
     @PostMapping("/detail")
     public ProductDetailResponseDTO createProductDetail(@RequestBody ProductDetailRequestDTO request) {
@@ -146,50 +157,5 @@ public class ProductController {
         productDetail.setComment(request.getComment());
         ProductDetail newProductDetail = productService.createProductDetail(productDetail);
         return new ProductDetailResponseDTO(newProductDetail);
-    }
-
-//    Use case: Update product detail by id
-    @PutMapping("/detail/{detailId}")
-    public ProductDetailResponseDTO updateProductDetail(@PathVariable Long detailId, @RequestBody ProductDetailRequestDTO request) {
-        // 1. Find existing product detail
-        Optional<ProductDetail> optionalProductDetail = productService.getProductDetail(detailId);
-        if (optionalProductDetail.isPresent()) {
-            ProductDetail existingProductDetail = optionalProductDetail.get();
-
-            // 2. Check if the description needs to be updated
-            // If yes, replace old description with the new description
-            if (request.getDescription() != null) {
-                existingProductDetail.setDescription(request.getDescription());
-            }
-
-            // 3. Check if the comment needs to be updated
-            // If yes, replace old comment with the new comment
-            if (request.getComment() != null) {
-                existingProductDetail.setComment(request.getComment());
-            }
-
-            // 4. Save updated product detail to database
-            ProductDetail updatedProductDetail = productService.updateProductDetail(existingProductDetail);
-
-            return new ProductDetailResponseDTO(updatedProductDetail);
-        }
-        return null;
-    }
-
-//    Use case: Get product detail by id
-    @GetMapping("/detail/{detailId}")
-    ProductDetailResponseDTO getProductDetail(@PathVariable Long detailId) {
-        Optional<ProductDetail> optionalProductDetail = productService.getProductDetail(detailId);
-        if (optionalProductDetail.isPresent()) {
-            ProductDetail existingProductDetail = optionalProductDetail.get();
-            return new ProductDetailResponseDTO(existingProductDetail);
-        }
-        return null;
-    }
-
-//    Use case: Get all product details
-    @GetMapping("/detail")
-    List<ProductDetailResponseDTO> getAllProductDetails() {
-        return productService.getAllProductDetails().stream().map(ProductDetailResponseDTO::new).collect(Collectors.toList());
     }
 }

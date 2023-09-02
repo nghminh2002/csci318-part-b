@@ -6,6 +6,7 @@ public class ProductRequestDTO {
     private Double price;
     private String description;
     private String comment;
+    private Long orderId;
 
     public String getProductCategory() {
         return productCategory;
@@ -25,5 +26,9 @@ public class ProductRequestDTO {
 
     public String getComment() {
         return comment;
+    }
+
+    public Long getOrderId() {
+        return orderId;
     }
 }

@@ -1,11 +1,14 @@
 package csci318.assignment.productservice.service;
 
+import csci318.assignment.productservice.model.Order;
 import csci318.assignment.productservice.model.Product;
 import csci318.assignment.productservice.model.ProductDetail;
 import csci318.assignment.productservice.repository.ProductDetailRepository;
 import csci318.assignment.productservice.repository.ProductRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,10 +16,12 @@ import java.util.Optional;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductDetailRepository productDetailRepository;
+    private final RestTemplate restTemplate;
 
-    public ProductServiceImpl(ProductRepository productRepository, ProductDetailRepository productDetailRepository) {
+    public ProductServiceImpl(ProductRepository productRepository, ProductDetailRepository productDetailRepository, RestTemplate restTemplate) {
         this.productRepository = productRepository;
         this.productDetailRepository = productDetailRepository;
+        this.restTemplate = restTemplate;
     }
 
     // Save new product into the database
@@ -61,6 +66,18 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAll();
     }
 
+    @Override
+    public List<Order> getAllOrdersHavingProduct(Long productId) {
+        final String url = "http://localhost:8082/order/";
+        List<Order> orders = new ArrayList<>();
+        List<Long> ids = productRepository.findById(productId).orElseThrow(RuntimeException::new)
+                .getCreatedOrders();
+        for (Long id : ids) {
+            orders.add(restTemplate.getForObject(url + id, Order.class));
+        }
+        return orders;
+    }
+
     // Save new product detail to the database
     @Override
     public ProductDetail createProductDetail(ProductDetail newProductDetail) {
@@ -76,11 +93,5 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Optional<ProductDetail> getProductDetail(Long productDetailId) {
         return productDetailRepository.findById(productDetailId);
-    }
-
-    // Get all product details
-    @Override
-    public List<ProductDetail> getAllProductDetails() {
-        return productDetailRepository.findAll();
     }
 }

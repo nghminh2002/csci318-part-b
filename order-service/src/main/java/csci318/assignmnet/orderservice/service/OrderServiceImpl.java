@@ -1,5 +1,6 @@
 package csci318.assignmnet.orderservice.service;
 
+import csci318.assignmnet.orderservice.controller.dto.AddOrderToProductDTO;
 import csci318.assignmnet.orderservice.model.Customer;
 import csci318.assignmnet.orderservice.model.Order;
 import csci318.assignmnet.orderservice.model.Product;
@@ -21,7 +22,9 @@ public class OrderServiceImpl implements OrderService {
     // Save new order to the database
     @Override
     public Order createOrder(Order newOrder) {
-        return orderRepository.save(newOrder);
+        Order order = orderRepository.save(newOrder);
+        this.addOrderToProduct(order.getProduct(), order.getId());
+        return order;
     }
 
     @Override
@@ -38,14 +41,18 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Customer getOrderSupplier(Long supplierId) {
         final String url = "http://localhost:8080/customer/";
-        Customer customer = restTemplate.getForObject(url + supplierId, Customer.class);
-        return customer;
+        return restTemplate.getForObject(url + supplierId, Customer.class);
     }
 
     @Override
     public Product getOrderProduct(Long productId) {
         final String url = "http://localhost:8081/product/";
-        Product product = restTemplate.getForObject(url + productId, Product.class);
-        return product;
+        return restTemplate.getForObject(url + productId, Product.class);
+    }
+
+    private void addOrderToProduct(Long productId, Long orderId) {
+        final String url = "http://localhost:8081/product/" + productId;
+        final AddOrderToProductDTO request = new AddOrderToProductDTO(orderId);
+        restTemplate.patchForObject(url, request, Product.class);
     }
 }

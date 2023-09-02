@@ -1,5 +1,6 @@
 package csci318.assignment.productservice.service;
 
+import csci318.assignment.productservice.model.Order;
 import csci318.assignment.productservice.model.Product;
 import csci318.assignment.productservice.model.ProductDetail;
 
@@ -13,10 +14,10 @@ public interface ProductService {
     Product updateProductProductDetail(Long productId, Long productDetailId);
     Product getProduct(Long productId);
     List<Product> getAllProducts();
+    List<Order> getAllOrdersHavingProduct(Long productId);
 
     //Operations for product detail
     ProductDetail createProductDetail(ProductDetail newProductDetail);
     ProductDetail updateProductDetail(ProductDetail updatedProductDetail);
     Optional<ProductDetail> getProductDetail(Long productDetailId);
-    List<ProductDetail> getAllProductDetails();
 }

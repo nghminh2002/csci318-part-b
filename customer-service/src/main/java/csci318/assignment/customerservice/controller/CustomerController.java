@@ -6,9 +6,9 @@ import csci318.assignment.customerservice.model.Contact;
 import csci318.assignment.customerservice.model.Customer;
 import csci318.assignment.customerservice.service.CustomerService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,7 +49,7 @@ public class CustomerController {
     }
 
 //    Use case: Update customer name, address, country
-    @PutMapping("/{customerId}")
+    @PatchMapping("/{customerId}")
     public CustomerResponseDTO updateCustomer(@PathVariable Long customerId, @RequestBody CustomerRequestDTO request) {
         // 1. Find existing customer
         Customer existingCustomer = customerService.getCustomerById(customerId);
@@ -107,7 +107,7 @@ public class CustomerController {
     }
 
 //    Use case: Map customer to contact
-    @PutMapping("/{customerId}/contact/{contactId}")
+    @PatchMapping("/{customerId}/contact/{contactId}")
     public CustomerResponseDTO updateCustomerContact(@PathVariable Long customerId, @PathVariable Long contactId) {
         Customer updatedCustomer =  customerService.updateCustomerContact(customerId, contactId);
         return new CustomerResponseDTO(updatedCustomer);
