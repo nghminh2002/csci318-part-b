@@ -1,5 +1,8 @@
 package csci318.assignment.productservice.model;
 
+import csci318.assignment.productservice.model.event.ProductEvent;
+import org.springframework.data.domain.AbstractAggregateRoot;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -13,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Product {
+public class Product extends AbstractAggregateRoot<Product> {
     @Id
     @GeneratedValue
     private Long id;
@@ -92,5 +95,33 @@ public class Product {
                 ", price=" + price +
                 ", productDetail=" + productDetail.toString() +
                 '}';
+    }
+
+    public void createProduct() {
+        ProductEvent event = new ProductEvent();
+        event.setEventName("Create");
+        event.setProductCategory(this.productCategory);
+        event.setProductId(this.id);
+        event.setName(this.name);
+        registerEvent(event);
+    }
+
+    public void updateProduct() {
+        ProductEvent event = new ProductEvent();
+        event.setEventName("Update");
+        event.setProductCategory(this.productCategory);
+        event.setProductId(this.id);
+        event.setName(this.name);
+        registerEvent(event);
+    }
+
+    public void addProductToOrder(Long orderId) {
+        this.createdOrders.add(orderId);
+        ProductEvent event = new ProductEvent();
+        event.setEventName("Order");
+        event.setProductCategory(this.productCategory);
+        event.setProductId(this.id);
+        event.setName(this.name);
+        registerEvent(event);
     }
 }

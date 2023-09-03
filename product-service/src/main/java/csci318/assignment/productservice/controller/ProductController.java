@@ -10,7 +10,6 @@ import csci318.assignment.productservice.model.Product;
 import csci318.assignment.productservice.model.ProductDetail;
 import csci318.assignment.productservice.service.ProductService;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,7 +53,7 @@ public class ProductController {
     }
 
 //    Use case: Update product category, name and price
-    @PatchMapping("/{productId}")
+    @PutMapping("/{productId}")
     public ProductResponseDTO updateProduct(@PathVariable Long productId, @RequestBody ProductRequestDTO request) {
         // 1. Find existing product
         Product existingProduct = productService.getProduct(productId);
@@ -78,7 +77,7 @@ public class ProductController {
         }
 
         if (request.getOrderId() != null) {
-            existingProduct.addCreatedOrders(request.getOrderId());
+            existingProduct.addProductToOrder(request.getOrderId());
         }
 
         // 5. Check if the product detail needs to be updated
@@ -120,6 +119,7 @@ public class ProductController {
         }
 
         // 6. Update product
+        existingProduct.updateProduct();
         Product updatedProduct = productService.updateProduct(existingProduct);
 
         return new ProductResponseDTO(updatedProduct);

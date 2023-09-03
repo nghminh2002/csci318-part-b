@@ -4,7 +4,9 @@ import csci318.assignmnet.orderservice.controller.dto.AddOrderToProductDTO;
 import csci318.assignmnet.orderservice.model.Customer;
 import csci318.assignmnet.orderservice.model.Order;
 import csci318.assignmnet.orderservice.model.Product;
+import csci318.assignmnet.orderservice.model.event.OrderEvent;
 import csci318.assignmnet.orderservice.repository.OrderRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -13,22 +15,31 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final RestTemplate restTemplate;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-    public OrderServiceImpl(OrderRepository orderRepository, RestTemplate restTemplate) {
+    public OrderServiceImpl(OrderRepository orderRepository, RestTemplate restTemplate, ApplicationEventPublisher applicationEventPublisher) {
         this.orderRepository = orderRepository;
         this.restTemplate = restTemplate;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     // Save new order to the database
     @Override
     public Order createOrder(Order newOrder) {
         Order order = orderRepository.save(newOrder);
+        OrderEvent event = new OrderEvent();
+        event.setEventName("Create");
+        event.setOrderId(order.getId());
+        event.setProductId(order.getProduct());
+        event.setSupplierId(order.getSupplier());
+        applicationEventPublisher.publishEvent(event);
         this.addOrderToProduct(order.getProduct(), order.getId());
         return order;
     }
 
     @Override
     public Order updateOrder(Order updatedOrder) {
+        updatedOrder.updateOrder();
         return orderRepository.save(updatedOrder);
     }
 

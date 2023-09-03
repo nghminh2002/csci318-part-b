@@ -1,5 +1,8 @@
 package csci318.assignmnet.orderservice.model;
 
+import csci318.assignmnet.orderservice.model.event.OrderEvent;
+import org.springframework.data.domain.AbstractAggregateRoot;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "customer_order")
-public class Order {
+public class Order extends AbstractAggregateRoot<Order> {
     @Id
     @GeneratedValue
     private Long id;
@@ -62,5 +65,14 @@ public class Order {
                 ", product=" + product +
                 ", quantity=" + quantity +
                 '}';
+    }
+
+    public void updateOrder() {
+        OrderEvent event = new OrderEvent();
+        event.setEventName("Update");
+        event.setOrderId(this.id);
+        event.setProductId(this.product);
+        event.setSupplierId(this.supplier);
+        registerEvent(event);
     }
 }
