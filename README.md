@@ -1,12 +1,8 @@
 # CSCI318 Group Assignment - Part B
-
-University of Wollongong
-
-Campus Liverpool - South Western Sydney
-
-CSCI318 - Software Engineering Practices & Principles
-
-Session: Spring 2023
+- University of Wollongong
+- Campus Liverpool - South Western Sydney
+- CSCI318 - Software Engineering Practices & Principles
+- Session: Spring 2023
 
 ### Project setup
 
