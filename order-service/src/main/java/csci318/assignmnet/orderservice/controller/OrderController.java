@@ -63,8 +63,8 @@ public class OrderController {
         // 5. Save updated order into the database
         existingOrder.updateOrder();
         Order updatedOrder = orderService.updateOrder(existingOrder);
-        Customer customer = orderService.getOrderSupplier(request.getSupplier());
-        Product product = orderService.getOrderProduct(request.getProduct());
+        Customer customer = orderService.getOrderSupplier(existingOrder.getSupplier());
+        Product product = orderService.getOrderProduct(existingOrder.getProduct());
         return new OrderResponseDTO(updatedOrder, customer, product);
     }
 

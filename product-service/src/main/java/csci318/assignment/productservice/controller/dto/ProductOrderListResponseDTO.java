@@ -9,6 +9,9 @@ import java.util.List;
 
 public class ProductOrderListResponseDTO {
     @JsonProperty
+    private final Long productId;
+
+    @JsonProperty
     private final String productCategory;
 
     @JsonProperty
@@ -27,6 +30,7 @@ public class ProductOrderListResponseDTO {
     private final List<Order> orderList;
 
     public ProductOrderListResponseDTO(Product product, List<Order> orderList) {
+        this.productId = product.getId();
         this.productCategory = product.getProductCategory();
         this.name = product.getName();
         this.price = product.getPrice();
@@ -36,6 +40,10 @@ public class ProductOrderListResponseDTO {
         this.comment = productDetail.getComment();
 
         this.orderList = orderList;
+    }
+
+    public Long getProductId() {
+        return productId;
     }
 
     public String getProductCategory() {

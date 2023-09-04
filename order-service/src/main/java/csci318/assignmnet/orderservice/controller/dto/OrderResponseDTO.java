@@ -7,6 +7,9 @@ import csci318.assignmnet.orderservice.model.Product;
 
 public class OrderResponseDTO {
     @JsonProperty
+    private final Long orderId;
+
+    @JsonProperty
     private final Long supplier;
 
     @JsonProperty
@@ -34,6 +37,7 @@ public class OrderResponseDTO {
     private final Double price;
 
     public OrderResponseDTO(Order order, Customer customer, Product product) {
+        this.orderId = order.getId();
         this.supplier = order.getSupplier();
         this.product = order.getProduct();
         this.quantity = order.getQuantity();
@@ -43,6 +47,10 @@ public class OrderResponseDTO {
         this.productCategory = product.getProductCategory();
         this.name = product.getName();
         this.price = product.getPrice();
+    }
+
+    public Long getOrderId() {
+        return orderId;
     }
 
     public Long getSupplier() {

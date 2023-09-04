@@ -6,6 +6,9 @@ import csci318.assignment.productservice.model.ProductDetail;
 
 public class ProductResponseDTO {
     @JsonProperty
+    private final Long productId;
+
+    @JsonProperty
     private final String productCategory;
 
     @JsonProperty
@@ -21,6 +24,7 @@ public class ProductResponseDTO {
     private final String comment;
 
     public ProductResponseDTO(Product product) {
+        this.productId = product.getId();
         this.productCategory = product.getProductCategory();
         this.name = product.getName();
         this.price = product.getPrice();
@@ -28,6 +32,10 @@ public class ProductResponseDTO {
         ProductDetail productDetail = product.getProductDetail();
         this.description = productDetail.getDescription();
         this.comment = productDetail.getComment();
+    }
+
+    public Long getProductId() {
+        return productId;
     }
 
     public String getProductCategory() {
