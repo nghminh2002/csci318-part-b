@@ -18,9 +18,6 @@ public class ProductRequestDTO {
     @JsonProperty
     private String comment;
 
-    @JsonProperty
-    private Long orderId;
-
     public String getProductCategory() {
         return productCategory;
     }
@@ -59,13 +56,5 @@ public class ProductRequestDTO {
 
     public void setComment(String comment) {
         this.comment = comment;
-    }
-
-    public Long getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
     }
 }

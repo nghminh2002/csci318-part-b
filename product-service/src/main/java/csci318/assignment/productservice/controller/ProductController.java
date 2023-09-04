@@ -38,6 +38,7 @@ public class ProductController {
         product.setName(request.getName());
         product.setPrice(request.getPrice());
         Product newProduct = productService.createProduct(product);
+        newProduct.createProduct();
 
         if (request.getComment() != null || request.getDescription() != null) {
             ProductDetail productDetail = new ProductDetail();
@@ -52,7 +53,7 @@ public class ProductController {
         return new ProductResponseDTO(newProduct);
     }
 
-//    Use case: Update product category, name and price
+//    Use case: Update product category, name, price, description and comment
     @PutMapping("/{productId}")
     public ProductResponseDTO updateProduct(@PathVariable Long productId, @RequestBody ProductRequestDTO request) {
         // 1. Find existing product
@@ -76,11 +77,7 @@ public class ProductController {
             existingProduct.setPrice(request.getPrice());
         }
 
-        if (request.getOrderId() != null) {
-            existingProduct.addProductToOrder(request.getOrderId());
-        }
-
-        // 5. Check if the product detail needs to be updated
+        // 4. Check if the product detail needs to be updated
         if (request.getComment() != null || request.getDescription() != null) {
 
             // 4.1. Check if this product has already had product detail
@@ -118,7 +115,7 @@ public class ProductController {
             productService.updateProductDetail(existingProductDetail);
         }
 
-        // 6. Update product
+        // 5. Update product
         existingProduct.updateProduct();
         Product updatedProduct = productService.updateProduct(existingProduct);
 

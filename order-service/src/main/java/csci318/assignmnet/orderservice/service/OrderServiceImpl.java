@@ -39,7 +39,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order updateOrder(Order updatedOrder) {
-        updatedOrder.updateOrder();
         return orderRepository.save(updatedOrder);
     }
 
@@ -62,8 +61,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void addOrderToProduct(Long productId, Long orderId) {
-        final String url = "http://localhost:8081/product/" + productId;
+        final String url = "http://localhost:8081/product/internal/" + productId + "/" + orderId ;
         final AddOrderToProductDTO request = new AddOrderToProductDTO(orderId);
-        restTemplate.patchForObject(url, request, Product.class);
+        restTemplate.put(url, request);
     }
 }
