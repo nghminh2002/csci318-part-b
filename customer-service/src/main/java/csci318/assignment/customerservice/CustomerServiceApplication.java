@@ -1,5 +1,6 @@
 package csci318.assignment.customerservice;
 
+import csci318.assignment.customerservice.model.Address;
 import csci318.assignment.customerservice.model.Contact;
 import csci318.assignment.customerservice.model.Customer;
 import csci318.assignment.customerservice.repository.ContactRepository;
@@ -7,7 +8,9 @@ import csci318.assignment.customerservice.repository.CustomerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 public class CustomerServiceApplication {
@@ -17,13 +20,18 @@ public class CustomerServiceApplication {
     }
 
     @Bean
+    public RestTemplate restTemplate(RestTemplateBuilder builder) {
+        return builder.build();
+    }
+
+    @Bean
     public CommandLineRunner loadDatabase(CustomerRepository customerRepository, ContactRepository contactRepository) {
         return args -> {
             // Customer and contact example 1
             Customer customer1 = new Customer();
             customer1.setId(1L);
             customer1.setCompanyName("Company A");
-            customer1.setAddress("Liverpool, South Western Sydney");
+            customer1.setAddress(new Address("Moore St", "Liverpool", "NSW"));
             customer1.setCountry("Australia");
             Customer savedCustomer1 = customerRepository.save(customer1);
 
@@ -43,7 +51,7 @@ public class CustomerServiceApplication {
             Customer customer2 = new Customer();
             customer2.setId(3L);
             customer2.setCompanyName("Company B");
-            customer2.setAddress("Auckland");
+            customer2.setAddress(new Address("King St", "Melbourne", "VIC"));
             customer2.setCountry("New Zealand");
             Customer savedCustomer2 = customerRepository.save(customer2);
 

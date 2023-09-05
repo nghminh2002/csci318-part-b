@@ -36,7 +36,54 @@ To log on, change the value in the `JDBC URL` entry to `jdbc:h2:mem:testdb`.
 ### Domain Event & Communications
 This version includes the domain event patterns and communications between services. 
 
-#### I. product-service
+#### I. customer-service
+The __customer-service__ implements only one way of publishing and handling domain events which is the
+`AbstractAggregateRoot` generic class. This also contains patterns including entity, value object, aggregate, event and domain service.
+
+Demonstrating Use Cases
+
+__1. Create new customer with contact__
+- event patterns: New event called __Create__ is created (check CUSTOMER_EVENT in h2-console)
+```shell
+curl -X POST -H "Content-Type:application/json" -d "{\"companyName\":\"Company C\", \"street\": \"Queen St\", \"city\":\"Sydney\", \"state\":\"NSW\", \"country\": \"Australia\", \"name\":\"Milly\", \"phone\": \"0123654987\", \"email\":\"hmn123@gmail.com\", \"position\":\"Student\"}" http://localhost:8080/customer
+```
+which returns
+```json
+{
+  "customerId":5,
+  "companyName":"Company C",
+  "address":"Queen St, Sydney, NSW",
+  "country":"Australia",
+  "contactId":6,
+  "name":"Milly",
+  "phone":"0123654987",
+  "email":"hmn123@gmail.com",
+  "position":"Student"
+}
+```
+
+__2. Update customer and contact__
+- update customer with `ID = 5` and the contact detail
+- event patterns: New event called __Update__ is created (check CUSTOMER_EVENT in h2-console)
+```shell
+curl -X PUT -H "Content-Type:application/json" -d "{\"street\": \"Oxford Ave\", \"city\":\"Bankstown\", \"state\":\"NSW\", \"name\":\"Nguyen\", \"email\":\"hmn1234@gmail.com\"}" http://localhost:8080/customer/5
+```
+which returns
+```json
+{
+  "customerId":5,
+  "companyName":"Company C",
+  "address":"Oxford Ave, Bankstown, NSW",
+  "country":"Australia",
+  "contactId":6,
+  "name":"Nguyen",
+  "phone":"0123654987",
+  "email":"hmn1234@gmail.com",
+  "position":"Student"
+}
+```
+
+#### II. product-service
 The __product-service__ implements only one way of publishing and handling domain events which is the
 `AbstractAggregateRoot` generic class.
 
@@ -110,7 +157,7 @@ which returns
 }
 ```
 
-#### II. order-service
+#### III. order-service
 The __order-service__ implements two ways of publishing and handling 
 domain events which are enabled in Spring Boot, i.e., the `AbstractAggregateRoot` generic class and the 
 `ApplicationEventPublisher` interface.
@@ -135,12 +182,12 @@ which returns
   "product":1,
   "quantity":12,
   "companyName":"Company B",
-  "address":"Auckland",
+  "address":"King St, Melbourne, VIC",
   "country":"New Zealand",
   "productCategory":"Meat",
   "name":"Chicken",
   "price":15.2
-}
+}  
 ```
 
 __2. Update order__
@@ -157,7 +204,7 @@ which returns
   "product":1,
   "quantity":120,
   "companyName":"Company B",
-  "address":"Auckland",
+  "address":"King St, Melbourne, VIC",
   "country":"New Zealand",
   "productCategory":"Meat",
   "name":"Chicken",
@@ -181,7 +228,7 @@ which returns
   "product":1,
   "quantity":10,
   "companyName":"Company A",
-  "address":"Liverpool, South Western Sydney",
+  "address":"Moore St, Liverpool, NSW",
   "country":"Australia",
   "productCategory":"Meat",
   "name":"Chicken",

@@ -2,6 +2,7 @@ package csci318.assignment.customerservice.controller;
 
 import csci318.assignment.customerservice.controller.dto.CustomerResponseDTO;
 import csci318.assignment.customerservice.controller.dto.CustomerRequestDTO;
+import csci318.assignment.customerservice.model.Address;
 import csci318.assignment.customerservice.model.Contact;
 import csci318.assignment.customerservice.model.Customer;
 import csci318.assignment.customerservice.service.CustomerService;
@@ -31,9 +32,10 @@ public class CustomerController {
     public CustomerResponseDTO createCustomer(@RequestBody CustomerRequestDTO request) {
         Customer customer = new Customer();
         customer.setCompanyName(request.getCompanyName());
-        customer.setAddress(request.getAddress());
+        customer.setAddress(new Address(request.getStreet(), request.getCity(), request.getState()));
         customer.setCountry(request.getCountry());
         Customer newCustomer = customerService.createCustomer(customer);
+        newCustomer.createCustomer();
 
         Contact contact = new Contact();
         contact.setName(request.getName());
@@ -62,8 +64,11 @@ public class CustomerController {
 
         // 3. Check if the address needs to be updated
         // If yes, replace old address with the new address
-        if (request.getAddress() != null) {
-            existingCustomer.setAddress(request.getAddress());
+        if (request.getStreet() != null || request.getCity() != null || request.getState() != null) {
+            String street = request.getStreet() != null ? request.getStreet() : existingCustomer.getAddress().getStreet();
+            String city = request.getCity() != null ? request.getCity() : existingCustomer.getAddress().getCity();
+            String state = request.getState() != null ? request.getState() : existingCustomer.getAddress().getState();
+            existingCustomer.setAddress(new Address(street, city, state));
         }
 
         // 4. Check if the country needs to be updated
@@ -100,6 +105,7 @@ public class CustomerController {
         }
 
         //10. Save updated customer and contact to database
+        existingCustomer.updateCustomer();
         Customer updatedCustomer =  customerService.updateCustomer(existingCustomer);
         customerService.updateContact(existingContact);
 

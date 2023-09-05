@@ -1,7 +1,11 @@
 package csci318.assignment.customerservice.model;
 
+import csci318.assignment.customerservice.model.event.CustomerEvent;
+import org.springframework.data.domain.AbstractAggregateRoot;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -9,7 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 @Entity
-public class Customer {
+public class Customer extends AbstractAggregateRoot<Customer> {
     @Id
     @GeneratedValue
     private Long id;
@@ -17,8 +21,8 @@ public class Customer {
     @Column
     private String companyName;
 
-    @Column
-    private String address;
+    @Embedded
+    private Address address;
 
     @Column
     private String country;
@@ -43,11 +47,11 @@ public class Customer {
         this.companyName = companyName;
     }
 
-    public String getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 
@@ -72,9 +76,27 @@ public class Customer {
         return "{" +
                 "id=" + id +
                 ", companyName='" + companyName + '\'' +
-                ", address='" + address + '\'' +
+                ", address='" + address.toString() + '\'' +
                 ", country='" + country + '\'' +
                 ", contact=" + contact.toString() +
                 '}';
+    }
+
+    public void createCustomer() {
+        CustomerEvent event = new CustomerEvent();
+        event.setEventName("Create");
+        event.setCustomerId(this.id);
+        event.setAddress(this.address.toString());
+        event.setCountry(this.country);
+        registerEvent(event);
+    }
+
+    public void updateCustomer() {
+        CustomerEvent event = new CustomerEvent();
+        event.setEventName("Update");
+        event.setCustomerId(this.id);
+        event.setAddress(this.address.toString());
+        event.setCountry(this.country);
+        registerEvent(event);
     }
 }

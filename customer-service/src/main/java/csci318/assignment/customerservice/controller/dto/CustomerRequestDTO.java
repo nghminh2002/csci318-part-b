@@ -7,7 +7,13 @@ public class CustomerRequestDTO {
     private String companyName;
 
     @JsonProperty
-    private String address;
+    private String street;
+
+    @JsonProperty
+    private String city;
+
+    @JsonProperty
+    private String state;
 
     @JsonProperty
     private String country;
@@ -32,12 +38,28 @@ public class CustomerRequestDTO {
         this.companyName = companyName;
     }
 
-    public String getAddress() {
-        return address;
+    public String getStreet() {
+        return street;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getCountry() {
