@@ -75,6 +75,7 @@ public class ProductController {
         }
 
         // 5. Update product
+        existingProduct.updateProduct();
         Product updatedProduct = productService.updateProduct(existingProduct);
         return new ProductResponseDTO(updatedProduct);
     }

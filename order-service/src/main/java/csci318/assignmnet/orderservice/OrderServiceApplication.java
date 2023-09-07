@@ -37,7 +37,7 @@ public class OrderServiceApplication {
             Order order2 = new Order();
             order2.setId(2L);
             order2.setProduct(1L);
-            order2.setSupplier(3L);
+            order2.setSupplier(2L);
             order2.setQuantity(100);
             Order savedOrder2 = orderRepository.save(order2);
             System.out.println(savedOrder2);
@@ -45,8 +45,8 @@ public class OrderServiceApplication {
             // Order example 2
             Order order3 = new Order();
             order3.setId(3L);
-            order3.setProduct(3L);
-            order3.setSupplier(3L);
+            order3.setProduct(2L);
+            order3.setSupplier(2L);
             order3.setQuantity(1);
             Order savedOrder3 = orderRepository.save(order3);
             System.out.println(savedOrder3);

@@ -33,8 +33,8 @@ spring.datasource.url=jdbc:h2:mem:testdb
 The console [http://localhost:8082/h2-console/](http://localhost:8082/h2-console/).
 To log on, change the value in the `JDBC URL` entry to `jdbc:h2:mem:testdb`.
 
-### Domain Event & Communications
-This version includes the domain event patterns and communications between services. 
+### Patterns & Communications
+This version includes the entity, value object, aggregate, event and domain service patterns and communications between services. 
 
 #### I. customer-service
 The __customer-service__ implements two ways of publishing and handling domain events which are enabled in Spring Boot, 
@@ -126,15 +126,15 @@ which returns
     {
       "orderId":2,
       "supplier":{
-        "id":3,
-        "companyName":"Company C",
-        "address":"Oxford Ave, Bankstown, NSW",
+        "id":2,
+        "companyName":"Company B",
+        "address":"King St, Melbourne, VIC",
         "country":"Australia",
         "contact":{
-          "name":"Nguyen",
-          "phone":"0123654987",
-          "email":"hmn1234@gmail.com",
-          "position":"Student"
+          "name":"Nguyen Hue Minh",
+          "phone":"0987654321",
+          "email":"hmn998@gmail.com",
+          "position":"Software Engineer"
         }
       },
       "quantity":100
@@ -146,7 +146,7 @@ which returns
 __2. Create new product with product detail__
 - event patterns: New event called __Create__ is created (check PRODUCT_EVENT in h2-console)
 ```shell
-curl -X POST -H "Content-Type:application/json" -d "{\"productCategory\":\"Fruit\", \"name\": \"Banana\", \"price\": 15.20, \"description\":\"Made in Australia\", \"comment\": \"Unriped\"}" http://localhost:8081/product
+curl -X POST -H "Content-Type:application/json" -d "{\"productCategory\":\"Fruit\", \"name\": \"Banana\", \"price\": 15.20, \"description\":\"Made in Australia\", \"comment\": \"Unripe\"}" http://localhost:8081/product
 ```
 which returns
 ```json
@@ -156,7 +156,7 @@ which returns
   "name":"Banana",
   "price":15.2,
   "description":"Made in Australia",
-  "comment":"Unriped"
+  "comment":"Unripe"
 }
 ```
 
@@ -174,7 +174,7 @@ which returns
   "name":"Eggplant",
   "price":15.2,
   "description":"Purple Vegetable",
-  "comment":"Unriped"
+  "comment":"Unripe"
 }
 ```
 
@@ -193,17 +193,17 @@ __1. Create new order__
   + communicate with product-service to add orderId to createdOrders for product object (check PRODUCT_EVENT in h2-console,
 a new event called "Order" was created as a new order for the product was made and )
 ```shell
-curl -X POST -H "Content-Type:application/json" -d "{\"supplier\":3, \"product\": 1, \"quantity\": 12}" http://localhost:8082/order
+curl -X POST -H "Content-Type:application/json" -d "{\"supplier\":2, \"product\": 1, \"quantity\": 12}" http://localhost:8082/order
 ```
 which returns
 ```json
 {
   "orderId":4,
-  "supplier":3,
+  "supplier":2,
   "product":1,
   "quantity":12,
-  "companyName":"Company C",
-  "address":"Oxford Ave, Bankstown, NSW",
+  "companyName":"Company B",
+  "address":"King St, Melbourne, VIC",
   "country":"Australia",
   "productCategory":"Meat",
   "name":"Chicken",
@@ -243,15 +243,15 @@ now returns
     {
       "orderId":2,
       "supplier":{
-        "id":3,
-        "companyName":"Company C",
-        "address":"Oxford Ave, Bankstown, NSW",
+        "id":2,
+        "companyName":"Company B",
+        "address":"King St, Melbourne, VIC",
         "country":"Australia",
         "contact":{
-          "name":"Nguyen",
-          "phone":"0123654987",
-          "email":"hmn1234@gmail.com",
-          "position":"Student"
+          "name":"Nguyen Hue Minh",
+          "phone":"0987654321",
+          "email":"hmn998@gmail.com",
+          "position":"Software Engineer"
         }
       },
       "quantity":100
@@ -259,21 +259,24 @@ now returns
     {
       "orderId":4,
       "supplier":{
-        "id":3,
-        "companyName":"Company C",
-        "address":"Oxford Ave, Bankstown, NSW",
+        "id":2,
+        "companyName":"Company B",
+        "address":"King St, Melbourne, VIC",
         "country":"Australia",
         "contact":{
-          "name":"Nguyen",
-          "phone":"0123654987",
-          "email":"hmn1234@gmail.com",
-          "position":"Student"
+          "name":"Nguyen Hue Minh",
+          "phone":"0987654321",
+          "email":"hmn998@gmail.com",
+          "position":"Software Engineer"
         }
-      },"quantity":12
+      },
+      "quantity":12
     }
   ]
-} 
+}
 ```
+A new order with `ID = 4` has been added
+
 __2. Update order__
 - update order having `ID = 4`
 - event patterns: New event called __Update__ is created (check ORDER_EVENT in h2-console)
@@ -284,11 +287,11 @@ which returns
 ```json
 {
   "orderId":4,
-  "supplier":3,
+  "supplier":2,
   "product":1,
   "quantity":120,
-  "companyName":"Company C",
-  "address":"Oxford Ave, Bankstown, NSW",
+  "companyName":"Company B",
+  "address":"King St, Melbourne, VIC",
   "country":"Australia",
   "productCategory":"Meat",
   "name":"Chicken",
