@@ -37,9 +37,8 @@ public class CustomerServiceImpl implements CustomerService {
 //    Update customer
     @Override
     public Customer updateCustomer(Customer updatedCustomer) {
-        Customer customer = customerRepository.save(updatedCustomer);
-        customer.updateCustomer();
-        return customer;
+        updatedCustomer.updateCustomer();
+        return customerRepository.save(updatedCustomer);
     }
 
 //    Get all customers from database
