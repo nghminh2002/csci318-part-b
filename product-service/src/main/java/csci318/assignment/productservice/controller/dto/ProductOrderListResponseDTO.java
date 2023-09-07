@@ -3,7 +3,7 @@ package csci318.assignment.productservice.controller.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import csci318.assignment.productservice.model.Order;
 import csci318.assignment.productservice.model.Product;
-import csci318.assignment.productservice.model.ProductDetail;
+import csci318.assignment.productservice.model.valueobject.ProductDetail;
 
 import java.util.List;
 

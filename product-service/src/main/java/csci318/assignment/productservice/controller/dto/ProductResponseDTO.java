@@ -2,7 +2,7 @@ package csci318.assignment.productservice.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import csci318.assignment.productservice.model.Product;
-import csci318.assignment.productservice.model.ProductDetail;
+import csci318.assignment.productservice.model.valueobject.ProductDetail;
 
 public class ProductResponseDTO {
     @JsonProperty
@@ -32,29 +32,5 @@ public class ProductResponseDTO {
         ProductDetail productDetail = product.getProductDetail();
         this.description = productDetail.getDescription();
         this.comment = productDetail.getComment();
-    }
-
-    public Long getProductId() {
-        return productId;
-    }
-
-    public String getProductCategory() {
-        return productCategory;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getComment() {
-        return comment;
     }
 }

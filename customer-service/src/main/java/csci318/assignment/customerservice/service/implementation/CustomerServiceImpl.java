@@ -1,8 +1,9 @@
-package csci318.assignment.customerservice.service;
+package csci318.assignment.customerservice.service.implementation;
 
 import csci318.assignment.customerservice.model.Customer;
 import csci318.assignment.customerservice.model.event.CustomerEvent;
 import csci318.assignment.customerservice.repository.CustomerRepository;
+import csci318.assignment.customerservice.service.CustomerService;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 

@@ -1,17 +1,16 @@
 package csci318.assignment.productservice.model;
 
 import csci318.assignment.productservice.model.event.ProductEvent;
+import csci318.assignment.productservice.model.valueobject.ProductDetail;
 import org.springframework.data.domain.AbstractAggregateRoot;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,8 +29,7 @@ public class Product extends AbstractAggregateRoot<Product> {
     @Column
     private Double price;
 
-    @OneToOne(cascade= CascadeType.PERSIST)
-    @JoinColumn(name = "productDetailId")
+    @Embedded
     private ProductDetail productDetail;
 
     @Column
@@ -95,15 +93,6 @@ public class Product extends AbstractAggregateRoot<Product> {
                 ", price=" + price +
                 ", productDetail=" + productDetail.toString() +
                 '}';
-    }
-
-    public void createProduct() {
-        ProductEvent event = new ProductEvent();
-        event.setEventName("Create");
-        event.setProductCategory(this.productCategory);
-        event.setProductId(this.id);
-        event.setName(this.name);
-        registerEvent(event);
     }
 
     public void updateProduct() {

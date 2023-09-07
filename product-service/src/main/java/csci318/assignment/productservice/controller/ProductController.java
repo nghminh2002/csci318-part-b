@@ -1,13 +1,12 @@
 package csci318.assignment.productservice.controller;
 
-import csci318.assignment.productservice.controller.dto.ProductDetailRequestDTO;
-import csci318.assignment.productservice.controller.dto.ProductDetailResponseDTO;
 import csci318.assignment.productservice.controller.dto.ProductOrderListResponseDTO;
 import csci318.assignment.productservice.controller.dto.ProductRequestDTO;
 import csci318.assignment.productservice.controller.dto.ProductResponseDTO;
 import csci318.assignment.productservice.model.Order;
 import csci318.assignment.productservice.model.Product;
-import csci318.assignment.productservice.model.ProductDetail;
+import csci318.assignment.productservice.model.valueobject.ProductDetail;
+import csci318.assignment.productservice.service.ProductExternalService;
 import csci318.assignment.productservice.service.ProductService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,16 +17,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/product")
 public class ProductController {
     private final ProductService productService;
+    private final ProductExternalService productExternalService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, ProductExternalService productExternalService) {
         this.productService = productService;
+        this.productExternalService = productExternalService;
     }
 
 //    Use case: Create product
@@ -37,19 +37,8 @@ public class ProductController {
         product.setProductCategory(request.getProductCategory());
         product.setName(request.getName());
         product.setPrice(request.getPrice());
+        product.setProductDetail(new ProductDetail(request.getDescription(), request.getComment()));
         Product newProduct = productService.createProduct(product);
-        newProduct.createProduct();
-
-        if (request.getComment() != null || request.getDescription() != null) {
-            ProductDetail productDetail = new ProductDetail();
-            productDetail.setDescription(request.getDescription());
-            productDetail.setComment(request.getComment());
-            ProductDetail newProductDetail = productService.createProductDetail(productDetail);
-
-            newProduct.setProductDetail(newProductDetail);
-            productService.updateProduct(newProduct);
-        }
-
         return new ProductResponseDTO(newProduct);
     }
 
@@ -79,53 +68,14 @@ public class ProductController {
 
         // 4. Check if the product detail needs to be updated
         if (request.getComment() != null || request.getDescription() != null) {
-
-            // 4.1. Check if this product has already had product detail
             ProductDetail currentProductDetail = existingProduct.getProductDetail();
-            ProductDetail existingProductDetail = null;
-
-            // 4.2. If this product already had product detail then find it
-            if (currentProductDetail != null) {
-                Optional<ProductDetail> optionalProductDetail = productService.getProductDetail(currentProductDetail.getId());
-                if (optionalProductDetail.isPresent()) {
-                    existingProductDetail = optionalProductDetail.get();
-                }
-            }
-
-            // 4.3. If this product already had product detail then update the existing product detail
-            //      else create new product detail for the product
-            if (existingProductDetail != null) {
-                if (request.getDescription() != null) {
-                    existingProductDetail.setDescription(request.getDescription());
-                }
-
-                if (request.getComment() != null) {
-                    existingProductDetail.setComment(request.getComment());
-                }
-            } else {
-                ProductDetail newProductDetail = new ProductDetail();
-                newProductDetail.setDescription(request.getDescription());
-                newProductDetail.setComment(request.getComment());
-                existingProductDetail = productService.createProductDetail(newProductDetail);
-
-                existingProduct.setProductDetail(newProductDetail);
-            }
-
-            // 4.4 Update product detail
-            productService.updateProductDetail(existingProductDetail);
+            String description = request.getDescription() != null ? request.getDescription() : currentProductDetail.getDescription();
+            String comment = request.getComment() != null ? request.getComment() : currentProductDetail.getComment();
+            existingProduct.setProductDetail(new ProductDetail(description, comment));
         }
 
         // 5. Update product
-        existingProduct.updateProduct();
         Product updatedProduct = productService.updateProduct(existingProduct);
-
-        return new ProductResponseDTO(updatedProduct);
-    }
-
-//    Use case: Map product detail to product
-    @PutMapping("/{productId}/detail/{detailId}")
-    public ProductResponseDTO updateProductProductDetail(@PathVariable Long productId, @PathVariable Long detailId) {
-        Product updatedProduct = productService.updateProductProductDetail(productId, detailId);
         return new ProductResponseDTO(updatedProduct);
     }
 
@@ -146,17 +96,7 @@ public class ProductController {
     @GetMapping("/{productId}/all-orders")
     ProductOrderListResponseDTO getAllOrdersHavingProduct(@PathVariable Long productId) {
         Product existingProduct = productService.getProduct(productId);
-        List<Order> createdOrders = productService.getAllOrdersHavingProduct(productId);
+        List<Order> createdOrders = productExternalService.getAllOrdersHavingProduct(productId);
         return new ProductOrderListResponseDTO(existingProduct, createdOrders);
-    }
-
-//    Use case: Create product detail
-    @PostMapping("/detail")
-    public ProductDetailResponseDTO createProductDetail(@RequestBody ProductDetailRequestDTO request) {
-        ProductDetail productDetail = new ProductDetail();
-        productDetail.setDescription(request.getDescription());
-        productDetail.setComment(request.getComment());
-        ProductDetail newProductDetail = productService.createProductDetail(productDetail);
-        return new ProductDetailResponseDTO(newProductDetail);
     }
 }
