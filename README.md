@@ -191,7 +191,7 @@ __1. Create new order__
   + communicate with customer-service to get customer data
   + communicate with product-service to get product data
   + communicate with product-service to add orderId to createdOrders for product object (check PRODUCT_EVENT in h2-console,
-a new event called "Order" was created as a new order for the product was made and )
+a new event called "Order" was created as a new order for the product was made)
 ```shell
 curl -X POST -H "Content-Type:application/json" -d "{\"supplier\":2, \"product\": 1, \"quantity\": 12}" http://localhost:8082/order
 ```
@@ -280,6 +280,9 @@ A new order with `ID = 4` has been added
 __2. Update order__
 - update order having `ID = 4`
 - event patterns: New event called __Update__ is created (check ORDER_EVENT in h2-console)
+- communications:
+  + communicate with customer-service to get customer data
+  + communicate with product-service to get product data
 ```shell
 curl -X PUT -H "Content-Type:application/json" -d "{\"quantity\": 120}" http://localhost:8082/order/4
 ```
