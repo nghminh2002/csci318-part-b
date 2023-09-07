@@ -6,7 +6,7 @@
 
 ### Project setup
 
-#### customer-service:
+#### customer-account-bounded-context:
 ```properties
 server.port=8080
 spring.h2.console.enabled=true
@@ -15,7 +15,7 @@ spring.datasource.url=jdbc:h2:mem:testdb
 The console [http://localhost:8080/h2-console/](http://localhost:8080/h2-console/).
 To log on, change the value in the `JDBC URL` entry to `jdbc:h2:mem:testdb`.
 
-#### product-service:
+#### sales-bounded-context:
 ```properties
 server.port=8081
 spring.h2.console.enabled=true
@@ -24,7 +24,7 @@ spring.datasource.url=jdbc:h2:mem:testdb
 The console [http://localhost:8081/h2-console/](http://localhost:8081/h2-console/).
 To log on, change the value in the `JDBC URL` entry to `jdbc:h2:mem:testdb`.
 
-#### order-service:
+#### procurement-bounded-context:
 ```properties
 server.port=8082
 spring.h2.console.enabled=true
@@ -36,8 +36,8 @@ To log on, change the value in the `JDBC URL` entry to `jdbc:h2:mem:testdb`.
 ### Patterns & Communications
 This version includes the entity, value object, aggregate, event and domain service patterns and communications between services. 
 
-#### I. customer-service
-The __customer-service__ implements two ways of publishing and handling domain events which are enabled in Spring Boot, 
+#### I. customer-account-bounded-context
+The __customer-account-bounded-context__ implements two ways of publishing and handling domain events which are enabled in Spring Boot, 
 i.e., the `AbstractAggregateRoot` generic class and the `ApplicationEventPublisher` interface. This also contains patterns 
 including entity, value object, aggregate, event and domain service.
 
@@ -82,8 +82,8 @@ which returns
 }
 ```
 
-#### II. product-service
-The __product-service__ implements two ways of publishing and handling domain events which are enabled in Spring Boot,
+#### II. sales-bounded-context
+The __sales-bounded-context__ implements two ways of publishing and handling domain events which are enabled in Spring Boot,
 i.e., the `AbstractAggregateRoot` generic class and the `ApplicationEventPublisher` interface. This also contains patterns
 including entity, value object, aggregate, event and domain service.
 
@@ -92,8 +92,8 @@ Demonstrating Use Cases
 __1. Get all created orders containing a product__
 - get all created orders containing a product having `ID = 1`
 - communications:
-  + communicate with order-service to get order data
-  + order-service communicate with customer-service to get customer data
+  + communicate with procurement-bounded-context to get order data
+  + procurement-bounded-context communicate with customer-account-bounded-context to get customer data
 ```shell
 curl -X GET http://localhost:8081/product/1/all-orders
 ```
@@ -178,8 +178,8 @@ which returns
 }
 ```
 
-#### III. order-service
-The __order-service__ implements two ways of publishing and handling 
+#### III. procurement-bounded-context
+The __procurement-bounded-context__ implements two ways of publishing and handling 
 domain events which are enabled in Spring Boot, i.e., the `AbstractAggregateRoot` generic class and the 
 `ApplicationEventPublisher` interface.
 
@@ -188,9 +188,9 @@ Demonstrating Use Cases
 __1. Create new order__
 - event patterns: New event called __Create__ is created (check ORDER_EVENT in h2-console)
 - communications: 
-  + communicate with customer-service to get customer data
-  + communicate with product-service to get product data
-  + communicate with product-service to add orderId to createdOrders for product object (check PRODUCT_EVENT in h2-console,
+  + communicate with customer-account-bounded-context to get customer data
+  + communicate with sales-bounded-context to get product data
+  + communicate with sales-bounded-context to add orderId to createdOrders for product object (check PRODUCT_EVENT in h2-console,
 a new event called "Order" was created as a new order for the product was made)
 ```shell
 curl -X POST -H "Content-Type:application/json" -d "{\"supplier\":2, \"product\": 1, \"quantity\": 12}" http://localhost:8082/order
@@ -281,8 +281,8 @@ __2. Update order__
 - update order having `ID = 4`
 - event patterns: New event called __Update__ is created (check ORDER_EVENT in h2-console)
 - communications:
-  + communicate with customer-service to get customer data
-  + communicate with product-service to get product data
+  + communicate with customer-account-bounded-context to get customer data
+  + communicate with sales-bounded-context to get product data
 ```shell
 curl -X PUT -H "Content-Type:application/json" -d "{\"quantity\": 120}" http://localhost:8082/order/4
 ```
@@ -305,8 +305,8 @@ which returns
 __3. Get order by id__
 - get order having `ID = 1`
 - communications:
-  + communicate with customer-service to get customer data
-  + communicate with product-service to get product data
+  + communicate with customer-account-bounded-context to get customer data
+  + communicate with sales-bounded-context to get product data
 ```shell
 curl -X GET http://localhost:8082/order/1
 ```
