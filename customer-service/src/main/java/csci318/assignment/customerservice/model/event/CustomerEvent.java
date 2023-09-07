@@ -18,6 +18,9 @@ public class CustomerEvent {
     private Long customerId;
 
     @Column
+    private String companyName;
+
+    @Column
     private String address;
 
     @Column
@@ -48,6 +51,14 @@ public class CustomerEvent {
 
     public void setCustomerId(Long customerId) {
         this.customerId = customerId;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
     public String getAddress() {

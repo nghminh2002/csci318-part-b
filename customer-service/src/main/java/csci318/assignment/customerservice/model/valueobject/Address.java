@@ -1,4 +1,4 @@
-package csci318.assignment.customerservice.model;
+package csci318.assignment.customerservice.model.valueobject;
 
 import java.util.Objects;
 

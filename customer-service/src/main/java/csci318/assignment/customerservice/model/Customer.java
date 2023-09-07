@@ -1,16 +1,15 @@
 package csci318.assignment.customerservice.model;
 
 import csci318.assignment.customerservice.model.event.CustomerEvent;
+import csci318.assignment.customerservice.model.valueobject.Address;
+import csci318.assignment.customerservice.model.valueobject.Contact;
 import org.springframework.data.domain.AbstractAggregateRoot;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 
 @Entity
 public class Customer extends AbstractAggregateRoot<Customer> {
@@ -27,8 +26,7 @@ public class Customer extends AbstractAggregateRoot<Customer> {
     @Column
     private String country;
 
-    @OneToOne(cascade= CascadeType.PERSIST)
-    @JoinColumn(name = "contactId")
+    @Embedded
     private Contact contact;
 
     public Long getId() {
@@ -80,15 +78,6 @@ public class Customer extends AbstractAggregateRoot<Customer> {
                 ", country='" + country + '\'' +
                 ", contact=" + contact.toString() +
                 '}';
-    }
-
-    public void createCustomer() {
-        CustomerEvent event = new CustomerEvent();
-        event.setEventName("Create");
-        event.setCustomerId(this.id);
-        event.setAddress(this.address.toString());
-        event.setCountry(this.country);
-        registerEvent(event);
     }
 
     public void updateCustomer() {

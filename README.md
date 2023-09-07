@@ -37,8 +37,9 @@ To log on, change the value in the `JDBC URL` entry to `jdbc:h2:mem:testdb`.
 This version includes the domain event patterns and communications between services. 
 
 #### I. customer-service
-The __customer-service__ implements only one way of publishing and handling domain events which is the
-`AbstractAggregateRoot` generic class. This also contains patterns including entity, value object, aggregate, event and domain service.
+The __customer-service__ implements two ways of publishing and handling domain events which are enabled in Spring Boot, 
+i.e., the `AbstractAggregateRoot` generic class and the `ApplicationEventPublisher` interface. This also contains patterns 
+including entity, value object, aggregate, event and domain service.
 
 Demonstrating Use Cases
 
@@ -50,11 +51,10 @@ curl -X POST -H "Content-Type:application/json" -d "{\"companyName\":\"Company C
 which returns
 ```json
 {
-  "customerId":5,
+  "customerId":3,
   "companyName":"Company C",
   "address":"Queen St, Sydney, NSW",
   "country":"Australia",
-  "contactId":6,
   "name":"Milly",
   "phone":"0123654987",
   "email":"hmn123@gmail.com",
@@ -62,20 +62,19 @@ which returns
 }
 ```
 
-__2. Update customer and contact__
-- update customer with `ID = 5` and the contact detail
+__2. Update customer__
+- update customer with `ID = 3`
 - event patterns: New event called __Update__ is created (check CUSTOMER_EVENT in h2-console)
 ```shell
-curl -X PUT -H "Content-Type:application/json" -d "{\"street\": \"Oxford Ave\", \"city\":\"Bankstown\", \"state\":\"NSW\", \"name\":\"Nguyen\", \"email\":\"hmn1234@gmail.com\"}" http://localhost:8080/customer/5
+curl -X PUT -H "Content-Type:application/json" -d "{\"street\": \"Oxford Ave\", \"city\":\"Bankstown\", \"state\":\"NSW\", \"name\":\"Nguyen\", \"email\":\"hmn1234@gmail.com\"}" http://localhost:8080/customer/3
 ```
 which returns
 ```json
 {
-  "customerId":5,
+  "customerId":3,
   "companyName":"Company C",
   "address":"Oxford Ave, Bankstown, NSW",
   "country":"Australia",
-  "contactId":6,
   "name":"Nguyen",
   "phone":"0123654987",
   "email":"hmn1234@gmail.com",
