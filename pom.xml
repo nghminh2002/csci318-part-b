@@ -9,9 +9,9 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>customer-service</module>
-        <module>product-service</module>
-        <module>order-service</module>
+        <module>customer-account-bounded-context</module>
+        <module>procurement-bounded-context</module>
+        <module>sales-bounded-context</module>
     </modules>
 
     <properties>

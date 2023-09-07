@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>csci318.assignment</groupId>
-    <artifactId>product-service</artifactId>
+    <artifactId>sales-bounded-context</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>product-service</name>
-    <description>product-service</description>
+    <name>sales-bounded-context</name>
+    <description>sales-bounded-context</description>
     <properties>
         <java.version>11</java.version>
     </properties>

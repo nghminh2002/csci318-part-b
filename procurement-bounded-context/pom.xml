@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>csci318.assignmnet</groupId>
-    <artifactId>order-service</artifactId>
+    <artifactId>procurement-bounded-context</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>order-service</name>
-    <description>order-service</description>
+    <name>procurement-bounded-context</name>
+    <description>procurement-bounded-context</description>
     <properties>
         <java.version>11</java.version>
     </properties>
