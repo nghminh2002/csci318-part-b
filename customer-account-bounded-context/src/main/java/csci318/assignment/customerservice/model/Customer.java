@@ -82,6 +82,7 @@ public class Customer extends AbstractAggregateRoot<Customer> {
     public void updateCustomer() {
         CustomerEvent event = new CustomerEvent();
         event.setEventName("Update");
+        event.setCompanyName(this.companyName);
         event.setCustomerId(this.id);
         event.setAddress(this.address);
         event.setCountry(this.country);

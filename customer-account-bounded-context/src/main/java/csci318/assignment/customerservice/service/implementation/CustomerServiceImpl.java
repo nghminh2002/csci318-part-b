@@ -28,7 +28,7 @@ public class CustomerServiceImpl implements CustomerService {
         event.setEventName("Create");
         event.setCustomerId(savedCustomer.getId());
         event.setCompanyName(savedCustomer.getCompanyName());
-        event.setAddress(savedCustomer.getAddress().toString());
+        event.setAddress(savedCustomer.getAddress());
         event.setCountry(savedCustomer.getCountry());
         applicationEventPublisher.publishEvent(event);
         return savedCustomer;
@@ -36,9 +36,10 @@ public class CustomerServiceImpl implements CustomerService {
 
 //    Update customer
     @Override
-    public Customer updateCustomer(Customer updateCustomer) {
-        updateCustomer.updateCustomer();
-        return customerRepository.save(updateCustomer);
+    public Customer updateCustomer(Customer updatedCustomer) {
+        Customer customer = customerRepository.save(updatedCustomer);
+        customer.updateCustomer();
+        return customer;
     }
 
 //    Get all customers from database
