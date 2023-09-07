@@ -1,8 +1,6 @@
-package csci318.assignment.customerservice.model;
+package csci318.assignment.productservice.model;
 
-import csci318.assignment.customerservice.model.event.CustomerEvent;
-import csci318.assignment.customerservice.model.valueobject.Contact;
-import org.springframework.data.domain.AbstractAggregateRoot;
+import csci318.assignment.productservice.model.valueobject.Contact;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -11,7 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class Customer extends AbstractAggregateRoot<Customer> {
+public class Customer {
     @Id
     @GeneratedValue
     private Long id;
@@ -66,25 +64,5 @@ public class Customer extends AbstractAggregateRoot<Customer> {
 
     public void setContact(Contact contact) {
         this.contact = contact;
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-                "id=" + id +
-                ", companyName='" + companyName + '\'' +
-                ", address='" + address + '\'' +
-                ", country='" + country + '\'' +
-                ", contact=" + contact.toString() +
-                '}';
-    }
-
-    public void updateCustomer() {
-        CustomerEvent event = new CustomerEvent();
-        event.setEventName("Update");
-        event.setCustomerId(this.id);
-        event.setAddress(this.address);
-        event.setCountry(this.country);
-        registerEvent(event);
     }
 }

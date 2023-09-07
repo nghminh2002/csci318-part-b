@@ -48,44 +48,4 @@ public class OrderResponseDTO {
         this.name = product.getName();
         this.price = product.getPrice();
     }
-
-    public Long getOrderId() {
-        return orderId;
-    }
-
-    public Long getSupplier() {
-        return supplier;
-    }
-
-    public Long getProduct() {
-        return product;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public String getProductCategory() {
-        return productCategory;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
 }

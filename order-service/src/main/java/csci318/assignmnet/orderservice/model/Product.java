@@ -1,12 +1,12 @@
 package csci318.assignmnet.orderservice.model;
 
-import javax.persistence.CascadeType;
+import csci318.assignmnet.orderservice.model.valueobject.ProductDetail;
+
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 
 @Entity
 public class Product {
@@ -23,8 +23,7 @@ public class Product {
     @Column
     private Double price;
 
-    @OneToOne(cascade= CascadeType.PERSIST)
-    @JoinColumn(name = "productDetailId")
+    @Embedded
     private ProductDetail productDetail;
 
     public Long getId() {

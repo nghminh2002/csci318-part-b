@@ -1,38 +1,22 @@
-package csci318.assignment.customerservice.model;
+package csci318.assignment.customerservice.model.valueobject;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.Embeddable;
+import java.util.Objects;
 
-@Entity
+@Embeddable
 public class Contact {
-    @Id
-    @GeneratedValue
-    private Long id;
-
-    @Column
     private String name;
-
-    @Column
     private String phone;
-
-    @Column
     private String email;
-
-    @Column
     private String position;
 
-    @OneToOne(mappedBy = "contact")
-    private Customer customer;
+    public Contact() {}
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public Contact(String name, String phone, String email, String position) {
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.position = position;
     }
 
     public String getName() {
@@ -67,19 +51,26 @@ public class Contact {
         this.position = position;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Contact contact = (Contact) o;
+        return Objects.equals(name, contact.name) &&
+                Objects.equals(phone, contact.phone) &&
+                Objects.equals(email, contact.email) &&
+                Objects.equals(position, contact.position);
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, phone, email, position);
     }
 
     @Override
     public String toString() {
         return "{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", position='" + position + '\'' +
