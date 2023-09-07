@@ -1,12 +1,12 @@
 package csci318.assignmnet.orderservice.model;
 
-import javax.persistence.CascadeType;
+import csci318.assignmnet.orderservice.model.valueobject.Contact;
+
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 
 @Entity
 public class Customer {
@@ -23,8 +23,7 @@ public class Customer {
     @Column
     private String country;
 
-    @OneToOne(cascade= CascadeType.PERSIST)
-    @JoinColumn(name = "contactId")
+    @Embedded
     private Contact contact;
 
     public Long getId() {
