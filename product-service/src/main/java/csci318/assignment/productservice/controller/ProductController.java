@@ -1,9 +1,9 @@
 package csci318.assignment.productservice.controller;
 
+import csci318.assignment.productservice.controller.dto.OrderCustomerResponseDTO;
 import csci318.assignment.productservice.controller.dto.ProductOrderListResponseDTO;
 import csci318.assignment.productservice.controller.dto.ProductRequestDTO;
 import csci318.assignment.productservice.controller.dto.ProductResponseDTO;
-import csci318.assignment.productservice.model.Order;
 import csci318.assignment.productservice.model.Product;
 import csci318.assignment.productservice.model.valueobject.ProductDetail;
 import csci318.assignment.productservice.service.ProductExternalService;
@@ -96,7 +96,7 @@ public class ProductController {
     @GetMapping("/{productId}/all-orders")
     ProductOrderListResponseDTO getAllOrdersHavingProduct(@PathVariable Long productId) {
         Product existingProduct = productService.getProduct(productId);
-        List<Order> createdOrders = productExternalService.getAllOrdersHavingProduct(productId);
+        List<OrderCustomerResponseDTO> createdOrders = productExternalService.getAllOrdersHavingProduct(productId);
         return new ProductOrderListResponseDTO(existingProduct, createdOrders);
     }
 }

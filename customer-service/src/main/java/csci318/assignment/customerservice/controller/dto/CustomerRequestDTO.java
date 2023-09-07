@@ -7,13 +7,7 @@ public class CustomerRequestDTO {
     private String companyName;
 
     @JsonProperty
-    private String street;
-
-    @JsonProperty
-    private String city;
-
-    @JsonProperty
-    private String state;
+    private String address;
 
     @JsonProperty
     private String country;
@@ -34,16 +28,8 @@ public class CustomerRequestDTO {
         return companyName;
     }
 
-    public String getStreet() {
-        return street;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public String getState() {
-        return state;
+    public String getAddress() {
+        return address;
     }
 
     public String getCountry() {

@@ -17,14 +17,14 @@ public class OrderExternalServiceImpl implements OrderExternalService {
 
     @Override
     public Customer getOrderSupplier(Long supplierId) {
-        final String url = "http://localhost:8080/customer/";
-        return restTemplate.getForObject(url + supplierId, Customer.class);
+        final String url = "http://localhost:8080/customer/internal/" + supplierId;
+        return restTemplate.getForObject(url, Customer.class);
     }
 
     @Override
     public Product getOrderProduct(Long productId) {
-        final String url = "http://localhost:8081/product/";
-        return restTemplate.getForObject(url + productId, Product.class);
+        final String url = "http://localhost:8081/product/internal/" + productId;
+        return restTemplate.getForObject(url, Product.class);
     }
 
     @Override

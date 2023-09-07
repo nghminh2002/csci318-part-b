@@ -1,6 +1,5 @@
 package csci318.assignment.customerservice;
 
-import csci318.assignment.customerservice.model.valueobject.Address;
 import csci318.assignment.customerservice.model.valueobject.Contact;
 import csci318.assignment.customerservice.model.Customer;
 import csci318.assignment.customerservice.repository.CustomerRepository;
@@ -36,7 +35,7 @@ public class CustomerServiceApplication {
             Customer customer1 = new Customer();
             customer1.setId(1L);
             customer1.setCompanyName("Company A");
-            customer1.setAddress(new Address("Moore St", "Liverpool", "NSW"));
+            customer1.setAddress("Moore St, Liverpool, NSW");
             customer1.setCountry("Australia");
             customer1.setContact(contact1);
             Customer savedCustomer1 = customerRepository.save(customer1);
@@ -53,7 +52,7 @@ public class CustomerServiceApplication {
             Customer customer2 = new Customer();
             customer2.setId(2L);
             customer2.setCompanyName("Company B");
-            customer2.setAddress(new Address("King St", "Melbourne", "VIC"));
+            customer2.setAddress("King St, Melbourne, VIC");
             customer2.setCountry("Australia");
             customer2.setContact(contact2);
             Customer savedCustomer2 = customerRepository.save(customer2);

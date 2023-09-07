@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -33,6 +34,13 @@ public class CustomerServiceImpl implements CustomerService {
         return savedCustomer;
     }
 
+//    Update customer
+    @Override
+    public Customer updateCustomer(Customer updateCustomer) {
+        updateCustomer.updateCustomer();
+        return customerRepository.save(updateCustomer);
+    }
+
 //    Get all customers from database
     @Override
     public List<Customer> getAllCustomers() {
@@ -42,14 +50,7 @@ public class CustomerServiceImpl implements CustomerService {
 //    Get customer by id
     @Override
     public Customer getCustomerById(Long customerId) {
-        return customerRepository.findById(customerId)
-                .orElseThrow(RuntimeException::new);
-    }
-
-//    Update customer
-    @Override
-    public Customer updateCustomer(Customer updateCustomer) {
-        updateCustomer.updateCustomer();
-        return customerRepository.save(updateCustomer);
+        Optional<Customer> customer = customerRepository.findById(customerId);
+        return customer.orElse(null);
     }
 }

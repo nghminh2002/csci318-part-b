@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -41,8 +42,8 @@ public class ProductServiceImpl implements ProductService {
     // Get product by product id
     @Override
     public Product getProduct(Long productId) {
-        return productRepository.findById(productId)
-                .orElseThrow(RuntimeException::new);
+        Optional<Product> product = productRepository.findById(productId);
+        return product.orElse(null);
     }
 
     // Get all products

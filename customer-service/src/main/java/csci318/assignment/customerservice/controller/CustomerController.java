@@ -2,7 +2,6 @@ package csci318.assignment.customerservice.controller;
 
 import csci318.assignment.customerservice.controller.dto.CustomerResponseDTO;
 import csci318.assignment.customerservice.controller.dto.CustomerRequestDTO;
-import csci318.assignment.customerservice.model.valueobject.Address;
 import csci318.assignment.customerservice.model.valueobject.Contact;
 import csci318.assignment.customerservice.model.Customer;
 import csci318.assignment.customerservice.service.CustomerService;
@@ -30,12 +29,11 @@ public class CustomerController {
 //    Use case: Create customer
     @PostMapping()
     public CustomerResponseDTO createCustomer(@RequestBody CustomerRequestDTO request) {
-        Address address = new Address(request.getStreet(), request.getCity(), request.getState());
         Contact contact = new Contact(request.getName(), request.getPhone(), request.getEmail(), request.getPosition());
 
         Customer customer = new Customer();
         customer.setCompanyName(request.getCompanyName());
-        customer.setAddress(address);
+        customer.setAddress(request.getAddress());
         customer.setCountry(request.getCountry());
         customer.setContact(contact);
         Customer newCustomer = customerService.createCustomer(customer);
@@ -57,12 +55,8 @@ public class CustomerController {
 
         // 3. Check if the address needs to be updated
         // If yes, replace old address with the new address
-        if (request.getStreet() != null || request.getCity() != null || request.getState() != null) {
-            Address currentAddress = existingCustomer.getAddress();
-            String street = request.getStreet() != null ? request.getStreet() : currentAddress.getStreet();
-            String city = request.getCity() != null ? request.getCity() : currentAddress.getCity();
-            String state = request.getState() != null ? request.getState() : currentAddress.getState();
-            existingCustomer.setAddress(new Address(street, city, state));
+        if (request.getAddress() != null) {
+            existingCustomer.setAddress(request.getAddress());
         }
 
         // 4. Check if the country needs to be updated
