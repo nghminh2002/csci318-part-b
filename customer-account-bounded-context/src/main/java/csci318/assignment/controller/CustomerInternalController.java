@@ -17,7 +17,7 @@ public class CustomerInternalController {
         this.customerService = customerService;
     }
 
-    //    Use case: Get customer by id
+//    Use case: Get customer by id
     @GetMapping("/{customerId}")
     Customer getCustomer(@PathVariable Long customerId) {
         return customerService.getCustomerById(customerId);

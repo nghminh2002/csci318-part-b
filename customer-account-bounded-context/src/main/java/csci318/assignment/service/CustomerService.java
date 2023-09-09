@@ -47,22 +47,25 @@ public class CustomerService {
     public Customer updateCustomer(Long customerId, CustomerRequestDTO request) {
         // 1. Find existing customer
         Customer existingCustomer = this.getCustomerById(customerId);
+        if (existingCustomer == null) {
+            throw new RuntimeException("The customer does not exist");
+        }
 
-        // 2. Update customer
-        Customer updatedCustomer = customerDomainService.updateCustomer(
-                existingCustomer,
-                request.getCompanyName(),
-                request.getAddress(),
-                request.getCountry()
-        );
-
-        // 3. Update customer's contact
+        // 2. Update customer's contact
         Contact newContact = customerDomainService.updateContact(
                 existingCustomer.getContact(),
                 request.getName(),
                 request.getPhone(),
                 request.getEmail(),
                 request.getPosition()
+        );
+
+        // 3. Update customer
+        Customer updatedCustomer = customerDomainService.updateCustomer(
+                existingCustomer,
+                request.getCompanyName(),
+                request.getAddress(),
+                request.getCountry()
         );
         updatedCustomer.setContact(newContact);
 

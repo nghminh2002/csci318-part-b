@@ -17,12 +17,12 @@ public class InternalProductController {
         this.productService = productService;
     }
 
-    //    Use case: Add order id to product
+//    Use case: Add order id to product
     @PutMapping("/{productId}/{orderId}")
-    public Product addOrderToProduct(@PathVariable Long productId, @PathVariable Long orderId) {
-        Product existingProduct = productService.getProduct(productId);
-        existingProduct.addProductToOrder(orderId);
-        return productService.updateProduct(existingProduct);
+    public Product addOrderToProduct(
+            @PathVariable Long productId,
+            @PathVariable Long orderId) {
+        return productService.addOrderToProduct(productId, orderId);
     }
 
 //    Use case: Get product by id
