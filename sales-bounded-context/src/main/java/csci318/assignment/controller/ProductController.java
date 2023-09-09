@@ -5,8 +5,6 @@ import csci318.assignment.controller.dto.ProductOrderListResponseDTO;
 import csci318.assignment.controller.dto.ProductRequestDTO;
 import csci318.assignment.controller.dto.ProductResponseDTO;
 import csci318.assignment.model.Product;
-import csci318.assignment.model.valueobject.ProductDetail;
-import csci318.assignment.service.ProductExternalService;
 import csci318.assignment.service.ProductService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,60 +21,30 @@ import java.util.stream.Collectors;
 @RequestMapping("/product")
 public class ProductController {
     private final ProductService productService;
-    private final ProductExternalService productExternalService;
 
-    public ProductController(ProductService productService, ProductExternalService productExternalService) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
-        this.productExternalService = productExternalService;
     }
 
 //    Use case: Create product
     @PostMapping()
-    public ProductResponseDTO createProduct(@RequestBody ProductRequestDTO request) {
-        Product product = new Product();
-        product.setProductCategory(request.getProductCategory());
-        product.setName(request.getName());
-        product.setPrice(request.getPrice());
-        product.setProductDetail(new ProductDetail(request.getDescription(), request.getComment()));
-        Product newProduct = productService.createProduct(product);
+    public ProductResponseDTO createProduct(
+            @RequestBody ProductRequestDTO request
+    ) {
+        Product newProduct = productService.createProduct(request);
         return new ProductResponseDTO(newProduct);
     }
 
 //    Use case: Update product category, name, price, description and comment
     @PutMapping("/{productId}")
-    public ProductResponseDTO updateProduct(@PathVariable Long productId, @RequestBody ProductRequestDTO request) {
-        // 1. Find existing product
-        Product existingProduct = productService.getProduct(productId);
-
-        // 2. Check if the product category needs to be updated
-        // If yes, replace old product category with the new product category
-        if (request.getProductCategory() != null) {
-            existingProduct.setProductCategory(request.getProductCategory());
-        }
-
-        // 3. Check if the name needs to be updated
-        // If yes, replace old name with the new name
-        if (request.getName() != null) {
-            existingProduct.setName(request.getName());
-        }
-
-        // 3. Check if the price needs to be updated
-        // If yes, replace old price with the new price
-        if (request.getPrice() != null) {
-            existingProduct.setPrice(request.getPrice());
-        }
-
-        // 4. Check if the product detail needs to be updated
-        if (request.getComment() != null || request.getDescription() != null) {
-            ProductDetail currentProductDetail = existingProduct.getProductDetail();
-            String description = request.getDescription() != null ? request.getDescription() : currentProductDetail.getDescription();
-            String comment = request.getComment() != null ? request.getComment() : currentProductDetail.getComment();
-            existingProduct.setProductDetail(new ProductDetail(description, comment));
-        }
-
-        // 5. Update product
-        existingProduct.updateProduct();
-        Product updatedProduct = productService.updateProduct(existingProduct);
+    public ProductResponseDTO updateProduct(
+            @PathVariable Long productId,
+            @RequestBody ProductRequestDTO request
+    ) {
+        Product updatedProduct = productService.updateProduct(
+                productId,
+                request
+        );
         return new ProductResponseDTO(updatedProduct);
     }
 
@@ -90,14 +58,19 @@ public class ProductController {
 //    Use case: Get all products
     @GetMapping()
     List<ProductResponseDTO> getAllProducts() {
-        return productService.getAllProducts().stream().map(ProductResponseDTO::new).collect(Collectors.toList());
+        return productService.getAllProducts().stream()
+                .map(ProductResponseDTO::new)
+                .collect(Collectors.toList());
     }
 
     //    Use case: Get all products
     @GetMapping("/{productId}/all-orders")
-    ProductOrderListResponseDTO getAllOrdersHavingProduct(@PathVariable Long productId) {
+    ProductOrderListResponseDTO getAllOrdersHavingProduct(
+            @PathVariable Long productId
+    ) {
         Product existingProduct = productService.getProduct(productId);
-        List<OrderCustomerResponseDTO> createdOrders = productExternalService.getAllOrdersHavingProduct(productId);
+        List<OrderCustomerResponseDTO> createdOrders =
+                productService.getAllOrdersHavingProduct(productId);
         return new ProductOrderListResponseDTO(existingProduct, createdOrders);
     }
 }
