@@ -2,19 +2,11 @@ package csci318.assignment.service;
 
 import csci318.assignment.controller.dto.CustomerRequestDTO;
 import csci318.assignment.model.Customer;
-import csci318.assignment.model.event.CustomerEvent;
 import csci318.assignment.model.valueobject.Contact;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CustomerDomainService {
-
-    private final ApplicationEventPublisher applicationEventPublisher;
-
-    public CustomerDomainService(ApplicationEventPublisher applicationEventPublisher) {
-        this.applicationEventPublisher = applicationEventPublisher;
-    }
 
     public Customer createFromDTO(CustomerRequestDTO request) {
         Contact contact = new Contact(
@@ -31,16 +23,6 @@ public class CustomerDomainService {
         customer.setContact(contact);
 
         return customer;
-    }
-
-    public void emitCustomerCreationEvent(Customer savedCustomer) {
-        CustomerEvent event = new CustomerEvent();
-        event.setEventName("Create");
-        event.setCustomerId(savedCustomer.getId());
-        event.setCompanyName(savedCustomer.getCompanyName());
-        event.setAddress(savedCustomer.getAddress());
-        event.setCountry(savedCustomer.getCountry());
-        applicationEventPublisher.publishEvent(event);
     }
 
     public  Customer updateCustomer(Customer originalCustomer, String companyName, String address, String country) {

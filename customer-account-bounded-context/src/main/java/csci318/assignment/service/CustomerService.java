@@ -2,28 +2,44 @@ package csci318.assignment.service;
 
 import csci318.assignment.controller.dto.CustomerRequestDTO;
 import csci318.assignment.model.Customer;
+import csci318.assignment.model.event.CustomerEvent;
 import csci318.assignment.model.valueobject.Contact;
 import csci318.assignment.repository.CustomerRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CustomerApplicationService {
+public class CustomerService {
     private final CustomerRepository customerRepository;
     private final CustomerDomainService customerDomainService;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-    public CustomerApplicationService(CustomerRepository customerRepository, CustomerDomainService customerDomainService) {
+    public CustomerService(
+            CustomerRepository customerRepository,
+            CustomerDomainService customerDomainService,
+            ApplicationEventPublisher applicationEventPublisher
+    ) {
         this.customerRepository = customerRepository;
         this.customerDomainService = customerDomainService;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     //    Save new customer to database
     public Customer createCustomer(CustomerRequestDTO request) {
         Customer customer = customerDomainService.createFromDTO(request);
         Customer savedCustomer = customerRepository.save(customer);
-        customerDomainService.emitCustomerCreationEvent(savedCustomer);
+
+        CustomerEvent event = new CustomerEvent();
+        event.setEventName("Create");
+        event.setCustomerId(savedCustomer.getId());
+        event.setCompanyName(savedCustomer.getCompanyName());
+        event.setAddress(savedCustomer.getAddress());
+        event.setCountry(savedCustomer.getCountry());
+        applicationEventPublisher.publishEvent(event);
+
         return savedCustomer;
     }
 
