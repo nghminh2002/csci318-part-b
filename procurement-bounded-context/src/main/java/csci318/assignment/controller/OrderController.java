@@ -5,7 +5,6 @@ import csci318.assignment.controller.dto.OrderResponseDTO;
 import csci318.assignment.model.Customer;
 import csci318.assignment.model.Order;
 import csci318.assignment.model.Product;
-import csci318.assignment.service.OrderExternalService;
 import csci318.assignment.service.OrderService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,32 +18,26 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/order")
 public class OrderController {
     private final OrderService orderService;
-    private final OrderExternalService orderExternalService;
 
-    public OrderController(OrderService orderService, OrderExternalService orderExternalService) {
+    public OrderController(OrderService orderService) {
         this.orderService = orderService;
-        this.orderExternalService = orderExternalService;
     }
 
 //    Use case: Create order
     @PostMapping()
     public OrderResponseDTO createOrder(@RequestBody OrderRequestDTO request) {
-        Customer existingCustomer = orderExternalService.getOrderSupplier(request.getSupplier());
+        Customer existingCustomer = orderService.getOrderSupplier(request.getSupplier());
         if (existingCustomer == null) {
             throw new RuntimeException("Customer does not exist!");
         }
 
-        Product existingProduct = orderExternalService.getOrderProduct(request.getProduct());
+        Product existingProduct = orderService.getOrderProduct(request.getProduct());
         if (existingProduct == null) {
             throw new RuntimeException("Product does not exist!");
         }
 
-        Order order = new Order();
-        order.setProduct(request.getProduct());
-        order.setSupplier(request.getSupplier());
-        order.setQuantity(request.getQuantity());
-        Order newOrder = orderService.createOrder(order);
-        orderExternalService.addOrderToProduct(existingProduct.getId(), newOrder.getId());
+        Order newOrder = orderService.createOrder(request);
+
         return new OrderResponseDTO(newOrder, existingCustomer, existingProduct);
     }
 
@@ -60,7 +53,7 @@ public class OrderController {
         // If yes, replace old supplier with the new supplier
         if (request.getSupplier() != null) {
             // 2.1. Check if the updated supplier exists
-            existingCustomer = orderExternalService.getOrderSupplier(request.getSupplier());
+            existingCustomer = orderService.getOrderSupplier(request.getSupplier());
             if (existingCustomer == null) {
                 throw new RuntimeException("Customer does not exist!");
             }
@@ -71,7 +64,7 @@ public class OrderController {
         // If yes, replace old product with the new product
         if (request.getProduct() != null) {
             // 2.1. Check if the updated product exists
-            existingProduct = orderExternalService.getOrderProduct(request.getProduct());
+            existingProduct = orderService.getOrderProduct(request.getProduct());
             if (existingProduct == null) {
                 throw new RuntimeException("Product does not exist!");
             }
@@ -89,10 +82,10 @@ public class OrderController {
 
         // 6. If customer and product have not been fetched then fetch
         if (existingCustomer == null) {
-            existingCustomer = orderExternalService.getOrderSupplier(existingOrder.getSupplier());
+            existingCustomer = orderService.getOrderSupplier(existingOrder.getSupplier());
         }
         if (existingProduct == null) {
-            existingProduct = orderExternalService.getOrderProduct(existingOrder.getProduct());
+            existingProduct = orderService.getOrderProduct(existingOrder.getProduct());
         }
 
         return new OrderResponseDTO(updatedOrder, existingCustomer, existingProduct);
@@ -101,8 +94,8 @@ public class OrderController {
     @GetMapping("/{orderId}")
     public OrderResponseDTO getOrderById(@PathVariable Long orderId) {
         Order order = orderService.getOrderById(orderId);
-        Customer customer = orderExternalService.getOrderSupplier(order.getSupplier());
-        Product product = orderExternalService.getOrderProduct(order.getProduct());
+        Customer customer = orderService.getOrderSupplier(order.getSupplier());
+        Product product = orderService.getOrderProduct(order.getProduct());
         return new OrderResponseDTO(order, customer, product);
     }
 }
