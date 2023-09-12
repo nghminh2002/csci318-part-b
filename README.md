@@ -82,6 +82,65 @@ which returns
 }
 ```
 
+__3. Get customer by id__
+- get customer with `ID = 1`
+```shell
+curl -X GET http://localhost:8080/customer/1
+```
+which returns
+```json
+{
+  "customerId":1,
+  "companyName":"Company A",
+  "address":"Moore St, Liverpool, NSW",
+  "country":"Australia",
+  "name":"Hue Minh Nguyen",
+  "phone":"0123456789",
+  "email":"hmn998@uowmail.edu.au",
+  "position":"Technical Support"
+}
+```
+
+__4. Get all customers__
+```shell
+curl -X GET http://localhost:8080/customer 
+```
+which returns
+```json
+[
+  {
+    "customerId":1,
+    "companyName":"Company A",
+    "address":"Moore St, Liverpool, NSW",
+    "country":"Australia",
+    "name":"Hue Minh Nguyen",
+    "phone":"0123456789",
+    "email":"hmn998@uowmail.edu.au",
+    "position":"Technical Support"
+  },
+  {
+    "customerId":2,
+    "companyName":"Company B",
+    "address":"King St, Melbourne, VIC",
+    "country":"Australia",
+    "name":"Nguyen Hue Minh",
+    "phone":"0987654321",
+    "email":"hmn998@gmail.com",
+    "position":"Software Engineer"
+  },
+  {
+    "customerId":3,
+    "companyName":"Company C",
+    "address":"Oxford Ave, Bankstown, NSW",
+    "country":"Australia",
+    "name":"Nguyen",
+    "phone":"0123654987",
+    "email":"hmn1234@gmail.com",
+    "position":"Student"
+  }
+]
+```
+
 #### II. sales-bounded-context
 The __sales-bounded-context__ implements two ways of publishing and handling domain events which are enabled in Spring Boot,
 i.e., the `AbstractAggregateRoot` generic class and the `ApplicationEventPublisher` interface. This also contains patterns
@@ -156,7 +215,8 @@ which returns
   "name":"Banana",
   "price":15.2,
   "description":"Made in Australia",
-  "comment":"Unripe"
+  "comment":"Unripe",
+  "numberOfCreatedOrders":0
 }
 ```
 
@@ -174,8 +234,62 @@ which returns
   "name":"Eggplant",
   "price":15.2,
   "description":"Purple Vegetable",
-  "comment":"Unripe"
+  "comment":"Unripe",
+  "numberOfCreatedOrders":0
 }
+```
+
+__4. Get product and its product detail using id__
+- get product with `ID = 1` and its detail
+```shell
+curl -X GET http://localhost:8081/product/1
+```
+which returns
+```json
+{
+  "productId":1,
+  "productCategory":"Meat",
+  "name":"Chicken",
+  "price":15.2,
+  "description":"Free cage chicken",
+  "comment":"Produced in Australia",
+  "numberOfCreatedOrders":2
+}
+```
+
+__5. Get all products__
+```shell
+curl -X GET http://localhost:8081/product 
+```
+which returns
+```json
+[
+  {
+    "productId":1,
+    "productCategory":"Meat",
+    "name":"Chicken",
+    "price":15.2,
+    "description":"Free cage chicken",
+    "comment":"Produced in Australia",
+    "numberOfCreatedOrders":2
+  },{
+    "productId":2,
+    "productCategory":"Vegetable",
+    "name":"Carrot",
+    "price":5.0,
+    "description":"Orange Vegetable",
+    "comment":"Grown Locally",
+    "numberOfCreatedOrders":1
+  },{
+    "productId":3,
+    "productCategory":"Vegetable",
+    "name":"Eggplant",
+    "price":15.2,
+    "description":"Purple Vegetable",
+    "comment":"Unripe",
+    "numberOfCreatedOrders":0
+  }
+]
 ```
 
 #### III. procurement-bounded-context

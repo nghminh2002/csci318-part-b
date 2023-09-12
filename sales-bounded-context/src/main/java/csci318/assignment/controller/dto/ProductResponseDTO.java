@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import csci318.assignment.model.Product;
 import csci318.assignment.model.valueobject.ProductDetail;
 
+import java.util.List;
+
 public class ProductResponseDTO {
     @JsonProperty
     private final Long productId;
@@ -23,11 +25,15 @@ public class ProductResponseDTO {
     @JsonProperty
     private final String comment;
 
+    @JsonProperty
+    private final Integer numberOfCreatedOrders;
+
     public ProductResponseDTO(Product product) {
         this.productId = product.getId();
         this.productCategory = product.getProductCategory();
         this.name = product.getName();
         this.price = product.getPrice();
+        this.numberOfCreatedOrders = product.getCreatedOrders().size();
 
         ProductDetail productDetail = product.getProductDetail();
         this.description = productDetail.getDescription();
