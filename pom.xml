@@ -12,6 +12,7 @@
         <module>customer-account-bounded-context</module>
         <module>procurement-bounded-context</module>
         <module>sales-bounded-context</module>
+        <module>analytics-bounded-context</module>
     </modules>
 
     <properties>
