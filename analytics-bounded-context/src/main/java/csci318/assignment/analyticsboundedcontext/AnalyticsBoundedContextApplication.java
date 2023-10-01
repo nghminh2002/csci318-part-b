@@ -1,4 +1,4 @@
-package csci318.assignment;
+package csci318.assignment.analyticsboundedcontext;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
