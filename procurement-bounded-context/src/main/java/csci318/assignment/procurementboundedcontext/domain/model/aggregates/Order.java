@@ -2,8 +2,6 @@ package csci318.assignment.procurementboundedcontext.domain.model.aggregates;
 
 import csci318.assignment.procurementboundedcontext.domain.model.commands.CreateOrderCommand;
 import csci318.assignment.procurementboundedcontext.domain.model.commands.UpdateOrderCommand;
-import csci318.assignment.procurementboundedcontext.domain.model.entities.Customer;
-import csci318.assignment.procurementboundedcontext.domain.model.entities.Product;
 import csci318.assignment.shareddomain.events.OrderCreatedEvent;
 import csci318.assignment.shareddomain.events.OrderCreatedEventData;
 import csci318.assignment.shareddomain.events.OrderUpdatedEvent;
@@ -27,10 +25,10 @@ public class Order extends AbstractAggregateRoot<Order> {
     private Long id;
     @Embedded
     private OrderId orderId;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Customer supplier;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Product product;
+    @Column
+    private Long supplier;
+    @Column
+    private Long product;
     @Column
     private Integer quantity;
 
@@ -38,12 +36,13 @@ public class Order extends AbstractAggregateRoot<Order> {
 
     public Order(CreateOrderCommand createOrderCommand) {
         this.orderId = new OrderId(createOrderCommand.getOrderId());
-        this.supplier = createOrderCommand.getSupplier();
-        this.product = createOrderCommand.getProduct();
+        this.supplier = createOrderCommand.getSupplierId();
+        this.product = createOrderCommand.getProductId();
+        this.quantity = createOrderCommand.getOrderQuantity();
 
         addDomainEvent(new OrderCreatedEvent(new OrderCreatedEventData(orderId.getOrderId(),
-                        supplier.getCompanyName(),
-                        product.getName(),
+                        createOrderCommand.getSupplier().getCompanyName(),
+                        createOrderCommand.getProduct().getName(),
                         createOrderCommand.getOrderQuantity())));
     }
 
@@ -63,19 +62,19 @@ public class Order extends AbstractAggregateRoot<Order> {
         this.orderId = orderId;
     }
 
-    public Customer getSupplier() {
+    public Long getSupplier() {
         return supplier;
     }
 
-    public void setSupplier(Customer supplier) {
+    public void setSupplier(Long supplier) {
         this.supplier = supplier;
     }
 
-    public Product getProduct() {
+    public Long getProduct() {
         return product;
     }
 
-    public void setProduct(Product product) {
+    public void setProduct(Long product) {
         this.product = product;
     }
 

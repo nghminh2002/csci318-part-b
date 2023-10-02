@@ -30,16 +30,12 @@ public class OrderResponseDTO {
     @JsonProperty
     private Double price;
 
-    public OrderResponseDTO(Order order) {
+    public OrderResponseDTO(Order order, Customer supplier, Product product) {
         this.orderId = order.getOrderId().getOrderId();
         this.quantity = order.getQuantity();
-
-        Customer supplier = order.getSupplier();
         this.companyName = supplier.getCompanyName();
         this.address = supplier.getAddress();
         this.country = supplier.getCountry();
-
-        Product product = order.getProduct();
         this.productCategory = product.getProductCategory();
         this.name = product.getName();
         this.price = product.getPrice();

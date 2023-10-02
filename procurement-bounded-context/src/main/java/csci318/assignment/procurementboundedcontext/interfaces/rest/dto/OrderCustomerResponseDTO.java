@@ -6,7 +6,7 @@ import csci318.assignment.procurementboundedcontext.domain.model.aggregates.Orde
 
 public class OrderCustomerResponseDTO {
     @JsonProperty
-    private final Long orderId;
+    private final String orderId;
 
     @JsonProperty
     private final Customer supplier;
@@ -14,9 +14,9 @@ public class OrderCustomerResponseDTO {
     @JsonProperty
     private final Integer quantity;
 
-    public OrderCustomerResponseDTO(Order order) {
-        this.orderId = order.getId();
-        this.supplier = order.getSupplier();
+    public OrderCustomerResponseDTO(Order order, Customer supplier) {
+        this.orderId = order.getOrderId().getOrderId();
+        this.supplier = supplier;
         this.quantity = order.getQuantity();
     }
 }

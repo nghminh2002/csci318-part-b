@@ -1,17 +1,13 @@
 package csci318.assignment.procurementboundedcontext.domain.model.entities;
 
-import csci318.assignment.procurementboundedcontext.domain.model.aggregates.Order;
 import csci318.assignment.procurementboundedcontext.domain.model.valueobject.Contact;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.util.List;
 
 @Entity
 public class Customer {
@@ -30,9 +26,6 @@ public class Customer {
 
     @Embedded
     private Contact contact;
-
-    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL)
-    private List<Order> orders;
 
     public Long getId() {
         return id;

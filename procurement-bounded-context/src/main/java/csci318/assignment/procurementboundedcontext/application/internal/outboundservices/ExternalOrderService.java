@@ -23,7 +23,7 @@ public class ExternalOrderService {
         return restTemplate.getForObject(url, Product.class);
     }
 
-    public void addOrderToProduct(Long productId, Long orderId) {
+    public void addOrderToProduct(Long productId, String orderId) {
         final String url = "http://localhost:8081/product/internal/" + productId + "/" + orderId ;
         restTemplate.put(url, null);
     }

@@ -21,7 +21,7 @@ public class InternalProductController {
     @PutMapping("/{productId}/{orderId}")
     public Product addOrderToProduct(
             @PathVariable Long productId,
-            @PathVariable Long orderId) {
+            @PathVariable String orderId) {
         return productService.addOrderToProduct(productId, orderId);
     }
 

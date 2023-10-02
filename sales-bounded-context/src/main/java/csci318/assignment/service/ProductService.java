@@ -87,7 +87,7 @@ public class ProductService {
     }
 
     // Add new order to product
-    public Product addOrderToProduct(Long productId, Long orderId) {
+    public Product addOrderToProduct(Long productId, String orderId) {
         // 1. Find existing product
         Product existingProduct = this.getProduct(productId);
         if (existingProduct == null) {
@@ -104,10 +104,10 @@ public class ProductService {
     public List<OrderCustomerResponseDTO> getAllOrdersHavingProduct(Long productId) {
         final String url = "http://localhost:8082/order/internal/";
         List<OrderCustomerResponseDTO> orders = new ArrayList<>();
-        List<Long> ids = productRepository.findById(productId)
+        List<String> ids = productRepository.findById(productId)
                 .orElseThrow(RuntimeException::new)
                 .getCreatedOrders();
-        for (Long id : ids) {
+        for (String id : ids) {
             orders.add(restTemplate.getForObject(url + id, OrderCustomerResponseDTO.class));
         }
         return orders;

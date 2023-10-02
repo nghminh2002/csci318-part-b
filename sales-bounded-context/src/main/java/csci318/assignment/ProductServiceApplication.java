@@ -36,8 +36,6 @@ public class ProductServiceApplication {
             product1.setName("Chicken");
             product1.setPrice(15.2);
             product1.setProductDetail(productDetail1);
-            product1.addCreatedOrders(1L);
-            product1.addCreatedOrders(2L);
             Product savedProduct1 = productRepository.save(product1);
             System.out.println(savedProduct1);
 
@@ -52,7 +50,6 @@ public class ProductServiceApplication {
             product2.setName("Carrot");
             product2.setPrice(5.0);
             product2.setProductDetail(productDetail2);
-            product2.addCreatedOrders(3L);
             Product savedProduct2 = productRepository.save(product2);
             System.out.println(savedProduct2);
         };

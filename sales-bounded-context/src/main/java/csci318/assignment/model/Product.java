@@ -33,8 +33,8 @@ public class Product extends AbstractAggregateRoot<Product> {
     private ProductDetail productDetail;
 
     @Column
-    @ElementCollection(fetch = FetchType.EAGER, targetClass=Long.class)
-    private List<Long> createdOrders = new ArrayList<>();
+    @ElementCollection(fetch = FetchType.EAGER, targetClass=String.class)
+    private List<String> createdOrders = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -76,11 +76,11 @@ public class Product extends AbstractAggregateRoot<Product> {
         this.productDetail = productDetail;
     }
 
-    public List<Long> getCreatedOrders() {
+    public List<String> getCreatedOrders() {
         return createdOrders;
     }
 
-    public void addCreatedOrders(Long orderId) {
+    public void addCreatedOrders(String orderId) {
         this.createdOrders.add(orderId);
     }
 
@@ -104,7 +104,7 @@ public class Product extends AbstractAggregateRoot<Product> {
         registerEvent(event);
     }
 
-    public void addProductToOrder(Long orderId) {
+    public void addProductToOrder(String orderId) {
         this.createdOrders.add(orderId);
         ProductEvent event = new ProductEvent();
         event.setEventName("Order");

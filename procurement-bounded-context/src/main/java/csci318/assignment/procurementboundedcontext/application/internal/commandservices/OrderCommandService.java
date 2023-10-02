@@ -21,8 +21,7 @@ public class OrderCommandService {
         String random = UUID.randomUUID().toString().toUpperCase();
         String orderIdStr = random.substring(0, random.indexOf("-"));
         createOrderCommand.setOrderId(orderIdStr);
-        Order newOrder = orderRepository.save(new Order(createOrderCommand));
-        return newOrder;
+        return orderRepository.save(new Order(createOrderCommand));
     }
 
     public Order updateOrder(UpdateOrderCommand updateOrderCommand) {

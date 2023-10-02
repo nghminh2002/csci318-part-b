@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class ProductController {
 
 //    Use case: Create product
     @PostMapping()
+    @ResponseBody
     public ProductResponseDTO createProduct(
             @RequestBody ProductRequestDTO request
     ) {
@@ -37,6 +39,7 @@ public class ProductController {
 
 //    Use case: Update product category, name, price, description and comment
     @PutMapping("/{productId}")
+    @ResponseBody
     public ProductResponseDTO updateProduct(
             @PathVariable Long productId,
             @RequestBody ProductRequestDTO request
@@ -50,6 +53,7 @@ public class ProductController {
 
 //    Use case: Get product by id
     @GetMapping("/{id}")
+    @ResponseBody
     ProductResponseDTO getProduct(@PathVariable Long id) {
         Product existingProduct = productService.getProduct(id);
         return new ProductResponseDTO(existingProduct);
@@ -57,6 +61,7 @@ public class ProductController {
 
 //    Use case: Get all products
     @GetMapping()
+    @ResponseBody
     List<ProductResponseDTO> getAllProducts() {
         return productService.getAllProducts().stream()
                 .map(ProductResponseDTO::new)
@@ -65,6 +70,7 @@ public class ProductController {
 
     //    Use case: Get all products
     @GetMapping("/{productId}/all-orders")
+    @ResponseBody
     ProductOrderListResponseDTO getAllOrdersHavingProduct(
             @PathVariable Long productId
     ) {
