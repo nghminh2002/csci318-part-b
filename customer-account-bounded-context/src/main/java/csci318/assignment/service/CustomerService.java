@@ -1,6 +1,6 @@
 package csci318.assignment.service;
 
-import csci318.assignment.controller.dto.CustomerRequestDTO;
+import csci318.assignment.salesboundedcontext.interfaces.rest.dto.CustomerRequestDTO;
 import csci318.assignment.model.Customer;
 import csci318.assignment.model.event.CustomerEvent;
 import csci318.assignment.model.valueobject.Contact;

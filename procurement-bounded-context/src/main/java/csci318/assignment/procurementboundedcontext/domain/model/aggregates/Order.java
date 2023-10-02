@@ -97,7 +97,12 @@ public class Order extends AbstractAggregateRoot<Order> {
     }
 
     public void updateOrder(UpdateOrderCommand updateOrderCommand) {
-        this.quantity = updateOrderCommand.getOrderQuantity();
+        this.supplier = updateOrderCommand.getSupplierId() != null ?
+                updateOrderCommand.getSupplierId() : this.supplier;
+        this.product = updateOrderCommand.getProductId() != null ?
+                updateOrderCommand.getProductId() : this.product;
+        this.quantity = updateOrderCommand.getOrderQuantity() != null ?
+                updateOrderCommand.getOrderQuantity(): this.quantity;
         addDomainEvent(new OrderUpdatedEvent(new OrderUpdatedEventData
                 (this.orderId.getOrderId())));
     }

@@ -5,6 +5,7 @@ import csci318.assignment.procurementboundedcontext.application.internal.outboun
 import csci318.assignment.procurementboundedcontext.application.internal.queryservices.OrderQueryService;
 import csci318.assignment.procurementboundedcontext.domain.model.aggregates.OrderId;
 import csci318.assignment.procurementboundedcontext.domain.model.commands.CreateOrderCommand;
+import csci318.assignment.procurementboundedcontext.domain.model.commands.UpdateOrderCommand;
 import csci318.assignment.procurementboundedcontext.interfaces.rest.dto.OrderRequestDTO;
 import csci318.assignment.procurementboundedcontext.interfaces.rest.dto.OrderResponseDTO;
 import csci318.assignment.procurementboundedcontext.domain.model.entities.Customer;
@@ -64,6 +65,7 @@ public class OrderController {
     @PutMapping("/{orderId}")
     @ResponseBody
     public OrderResponseDTO updateOrder(@PathVariable String orderId, @RequestBody OrderRequestDTO request) {
+        UpdateOrderCommand updateOrderCommand = OrderCommandDTOAssembler.toCommandFromDTO(orderId);
         // 1. Find existing order
         Order existingOrder = orderQueryService.findByOrderId(new OrderId(orderId));
         Customer existingCustomer = null;
@@ -77,7 +79,7 @@ public class OrderController {
             if (existingCustomer == null) {
                 throw new RuntimeException("Customer does not exist!");
             }
-            existingOrder.setSupplier(request.getSupplier());
+            updateOrderCommand.setSupplierId(request.getSupplier());
         }
 
         // 3. Check if the product needs to be updated
@@ -88,19 +90,17 @@ public class OrderController {
             if (existingProduct == null) {
                 throw new RuntimeException("Product does not exist!");
             }
-            existingOrder.setProduct(request.getProduct());
+            updateOrderCommand.setProductId(request.getProduct());
         }
 
         // 4. Check if the quantity needs to be updated
         // If yes, replace old quantity with the new quantity
         if (request.getQuantity() != null) {
-            existingOrder.setQuantity(request.getQuantity());
+            updateOrderCommand.setOrderQuantity(request.getQuantity());
         }
 
         // 5. Save updated order into the database
-        Order updatedOrder = orderCommandService.updateOrder(
-                OrderCommandDTOAssembler.toCommandFromDTO(orderId, request)
-        );
+        Order updatedOrder = orderCommandService.updateOrder(updateOrderCommand);
 
         // 6. If customer and product have not been fetched then fetch
         if (existingCustomer == null) {

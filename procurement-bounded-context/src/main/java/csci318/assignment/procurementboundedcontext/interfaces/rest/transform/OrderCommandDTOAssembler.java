@@ -14,10 +14,7 @@ public class OrderCommandDTOAssembler {
                 );
     }
 
-    public static UpdateOrderCommand toCommandFromDTO(String orderId, OrderRequestDTO orderRequestDTO){
-        return new UpdateOrderCommand(
-                orderId,
-                orderRequestDTO.getQuantity()
-        );
+    public static UpdateOrderCommand toCommandFromDTO(String orderId){
+        return new UpdateOrderCommand(orderId);
     }
 }

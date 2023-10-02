@@ -1,7 +1,7 @@
 package csci318.assignment.controller;
 
-import csci318.assignment.controller.dto.CustomerResponseDTO;
-import csci318.assignment.controller.dto.CustomerRequestDTO;
+import csci318.assignment.salesboundedcontext.interfaces.rest.dto.CustomerResponseDTO;
+import csci318.assignment.salesboundedcontext.interfaces.rest.dto.CustomerRequestDTO;
 import csci318.assignment.model.Customer;
 import csci318.assignment.service.CustomerService;
 import org.springframework.web.bind.annotation.GetMapping;

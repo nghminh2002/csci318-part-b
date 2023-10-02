@@ -11,7 +11,6 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @Service
 @EnableBinding(OrderEventSource.class)
 public class OrderEventPublisherService {
-
     OrderEventSource orderEventSource;
 
     public OrderEventPublisherService(OrderEventSource orderEventSource) {
@@ -28,4 +27,3 @@ public class OrderEventPublisherService {
         orderEventSource.orderUpdating().send(MessageBuilder.withPayload(orderUpdatedEvent).build());
     }
 }
-
