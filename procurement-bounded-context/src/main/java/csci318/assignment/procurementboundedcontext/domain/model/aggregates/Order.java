@@ -40,10 +40,13 @@ public class Order extends AbstractAggregateRoot<Order> {
         this.product = createOrderCommand.getProductId();
         this.quantity = createOrderCommand.getOrderQuantity();
 
-        addDomainEvent(new OrderCreatedEvent(new OrderCreatedEventData(orderId.getOrderId(),
-                        createOrderCommand.getSupplier().getCompanyName(),
-                        createOrderCommand.getProduct().getName(),
-                        createOrderCommand.getOrderQuantity())));
+        addDomainEvent(new OrderCreatedEvent(new OrderCreatedEventData(
+                orderId.getOrderId(),
+                createOrderCommand.getSupplierId(),
+                createOrderCommand.getProductId(),
+                createOrderCommand.getSupplier().getCompanyName(),
+                createOrderCommand.getProduct().getName(),
+                createOrderCommand.getOrderQuantity())));
     }
 
     public Long getId() {

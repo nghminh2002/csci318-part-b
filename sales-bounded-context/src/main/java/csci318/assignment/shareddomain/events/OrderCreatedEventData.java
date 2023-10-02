@@ -15,14 +15,10 @@ public class OrderCreatedEventData {
     }
 
     public OrderCreatedEventData(String orderId,
-                                 Long supplierId,
-                                 Long productId,
                                  String supplierName,
                                  String productName,
                                  Integer quantity) {
         this.orderId = orderId;
-        this.supplierId = supplierId;
-        this.productId = productId;
         this.supplierName = supplierName;
         this.productName = productName;
         this.quantity = quantity;
@@ -86,3 +82,4 @@ public class OrderCreatedEventData {
                 '}';
     }
 }
+

@@ -56,8 +56,6 @@ public class OrderController {
         createOrderCommand.setProduct(existingProduct);
         Order newOrder = orderCommandService.createOrder(createOrderCommand);
 
-        externalOrderService.addOrderToProduct(request.getProduct(), newOrder.getOrderId().getOrderId());
-
         return new OrderResponseDTO(newOrder, existingCustomer, existingProduct);
     }
 
