@@ -25,7 +25,9 @@ public class OrderCommandService {
     }
 
     public Order updateOrder(UpdateOrderCommand updateOrderCommand) {
-        Order order = orderRepository.findByOrderId(new OrderId(updateOrderCommand.getOrderId()));
+        Order order = orderRepository.findByOrderId(
+                new OrderId(updateOrderCommand.getOrderId())
+        );
         order.updateOrder(updateOrderCommand);
         return orderRepository.save(order);
     }

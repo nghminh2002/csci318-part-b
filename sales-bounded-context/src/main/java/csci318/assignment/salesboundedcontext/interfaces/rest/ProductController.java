@@ -38,7 +38,7 @@ public class ProductController {
         this.externalProductService = externalProductService;
     }
 
-//    Use case: Create product
+//  Use case: Create product
     @PostMapping()
     @ResponseBody
     public ProductResponseDTO createProduct(
@@ -50,7 +50,7 @@ public class ProductController {
         return new ProductResponseDTO(newProduct);
     }
 
-//    Use case: Update product category, name, price, description and comment
+//  Use case: Update product category, name, price, description and comment
     @PutMapping("/{productId}")
     @ResponseBody
     public ProductResponseDTO updateProduct(
@@ -64,7 +64,7 @@ public class ProductController {
         return new ProductResponseDTO(updatedProduct);
     }
 
-//    Use case: Get product by id
+//  Use case: Get product by id
     @GetMapping("/{id}")
     @ResponseBody
     ProductResponseDTO getProduct(@PathVariable Long id) {
@@ -72,7 +72,7 @@ public class ProductController {
         return new ProductResponseDTO(existingProduct);
     }
 
-//    Use case: Get all products
+//  Use case: Get all products
     @GetMapping()
     @ResponseBody
     List<ProductResponseDTO> getAllProducts() {
@@ -81,7 +81,7 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
-    //    Use case: Get all products
+//  Use case: Get all products
     @GetMapping("/{productId}/all-orders")
     @ResponseBody
     ProductOrderListResponseDTO getAllOrdersHavingProduct(

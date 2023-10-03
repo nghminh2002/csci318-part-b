@@ -31,7 +31,10 @@ public class ProductEventHandler {
                     receivedData.getProductName(),
                     receivedData.getSupplierName());
             LOGGER.info(message);
-            productCommandService.addOrderToProduct(receivedData.getProductId(), receivedData.getOrderId());
+            productCommandService.addOrderToProduct(
+                    receivedData.getProductId(),
+                    receivedData.getOrderId()
+            );
         } catch (Exception e) {
             LOGGER.error("Error processing order event", e);
         }

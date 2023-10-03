@@ -28,7 +28,10 @@ public class ProductOrderListResponseDTO {
     @JsonProperty
     private final List<OrderCustomerResponseDTO> orderList;
 
-    public ProductOrderListResponseDTO(Product product, List<OrderCustomerResponseDTO> orderList) {
+    public ProductOrderListResponseDTO(
+            Product product,
+            List<OrderCustomerResponseDTO> orderList
+    ) {
         this.productId = product.getId();
         this.productCategory = product.getProductCategory();
         this.name = product.getName();

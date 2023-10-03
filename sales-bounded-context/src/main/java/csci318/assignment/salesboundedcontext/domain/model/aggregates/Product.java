@@ -25,14 +25,19 @@ public class Product extends AbstractAggregateRoot<Product> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column
     private String productCategory;
+
     @Column
     private String name;
+
     @Column
     private Double price;
+
     @Embedded
     private ProductDetail productDetail;
+
     @Column
     @ElementCollection(fetch = FetchType.EAGER, targetClass=String.class)
     private List<String> createdOrders = new ArrayList<>();
@@ -44,9 +49,9 @@ public class Product extends AbstractAggregateRoot<Product> {
         this.name = createProductCommand.getName();
         this.price = createProductCommand.getPrice();
         this.productDetail = createProductCommand.getProductDetail();
-        addDomainEvent(new ProductCreatedEvent(new ProductCreatedEventData(
-                this.id, this.productCategory, this.name
-        )));
+        addDomainEvent(new ProductCreatedEvent(
+                new ProductCreatedEventData(this.id, this.productCategory, this.name)
+        ));
     }
 
     public Long getId() {
@@ -113,8 +118,9 @@ public class Product extends AbstractAggregateRoot<Product> {
         this.name = updateProductCommand.getName();
         this.price = updateProductCommand.getPrice();
         this.productDetail = updateProductCommand.getProductDetail();
-        addDomainEvent(new ProductUpdatedEvent(new ProductUpdatedEventData(
-                this.id, this.productCategory, this.name)));
+        addDomainEvent(new ProductUpdatedEvent(
+                new ProductUpdatedEventData(this.id, this.productCategory, this.name)
+        ));
     }
 
     public void addDomainEvent(Object event){

@@ -25,7 +25,8 @@ public class ProductCommandDTOAssembler {
             Product originalProduct,
             ProductRequestDTO request
     ) {
-        UpdateProductCommand updateProductCommand = new UpdateProductCommand(originalProduct.getId());
+        UpdateProductCommand updateProductCommand =
+                new UpdateProductCommand(originalProduct.getId());
         // 1. Check if the product category needs to be updated
         // If yes, replace old product category with the new product category
         if (request.getProductCategory()!= null) {
@@ -60,7 +61,9 @@ public class ProductCommandDTOAssembler {
             String newComment = request.getComment() != null
                     ? request.getComment()
                     : originProductDetail.getComment();
-            updateProductCommand.setProductDetail(new ProductDetail(newDescription, newComment));
+            updateProductCommand.setProductDetail(
+                    new ProductDetail(newDescription, newComment)
+            );
         } else {
             updateProductCommand.setProductDetail(originProductDetail);
         }

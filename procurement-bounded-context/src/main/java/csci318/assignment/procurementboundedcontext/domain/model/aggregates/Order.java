@@ -23,12 +23,16 @@ public class Order extends AbstractAggregateRoot<Order> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Embedded
     private OrderId orderId;
+
     @Column
     private Long supplier;
+
     @Column
     private Long product;
+
     @Column
     private Integer quantity;
 
@@ -100,12 +104,10 @@ public class Order extends AbstractAggregateRoot<Order> {
     }
 
     public void updateOrder(UpdateOrderCommand updateOrderCommand) {
-        this.supplier = updateOrderCommand.getSupplierId() != null ?
-                updateOrderCommand.getSupplierId() : this.supplier;
-        this.product = updateOrderCommand.getProductId() != null ?
-                updateOrderCommand.getProductId() : this.product;
-        this.quantity = updateOrderCommand.getOrderQuantity() != null ?
-                updateOrderCommand.getOrderQuantity(): this.quantity;
+        this.supplier = updateOrderCommand.getSupplierId();
+        this.product = updateOrderCommand.getProductId();
+        this.quantity = updateOrderCommand.getOrderQuantity();
+
         addDomainEvent(new OrderUpdatedEvent(new OrderUpdatedEventData
                 (this.orderId.getOrderId())));
     }

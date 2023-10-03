@@ -19,11 +19,15 @@ public class ProductEventPublisherService {
 
     @TransactionalEventListener
     public void handleProductCreatedEvent(ProductCreatedEvent productCreatedEvent){
-        productEventSource.productCreating().send(MessageBuilder.withPayload(productCreatedEvent).build());
+        productEventSource
+                .productCreating()
+                .send(MessageBuilder.withPayload(productCreatedEvent).build());
     }
 
     @TransactionalEventListener
     public void handleOrderUpdatedEvent(ProductUpdatedEvent productUpdatedEvent){
-        productEventSource.productUpdating().send(MessageBuilder.withPayload(productUpdatedEvent).build());
+        productEventSource
+                .productUpdating()
+                .send(MessageBuilder.withPayload(productUpdatedEvent).build());
     }
 }

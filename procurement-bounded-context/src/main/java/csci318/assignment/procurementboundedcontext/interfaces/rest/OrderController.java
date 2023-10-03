@@ -66,8 +66,8 @@ public class OrderController {
         UpdateOrderCommand updateOrderCommand = OrderCommandDTOAssembler.toCommandFromDTO(orderId);
         // 1. Find existing order
         Order existingOrder = orderQueryService.findByOrderId(new OrderId(orderId));
-        Customer existingCustomer = null;
-        Product existingProduct = null;
+        Customer existingCustomer;
+        Product existingProduct;
 
         // 2. Check if the supplier needs to be updated
         // If yes, replace old supplier with the new supplier
@@ -78,6 +78,9 @@ public class OrderController {
                 throw new RuntimeException("Customer does not exist!");
             }
             updateOrderCommand.setSupplierId(request.getSupplier());
+        } else {
+            existingCustomer = externalOrderService.getOrderSupplier(existingOrder.getSupplier());
+            updateOrderCommand.setSupplierId(existingOrder.getSupplier());
         }
 
         // 3. Check if the product needs to be updated
@@ -89,24 +92,21 @@ public class OrderController {
                 throw new RuntimeException("Product does not exist!");
             }
             updateOrderCommand.setProductId(request.getProduct());
+        } else {
+            existingProduct = externalOrderService.getOrderProduct(existingOrder.getProduct());
+            updateOrderCommand.setProductId(existingOrder.getProduct());
         }
 
         // 4. Check if the quantity needs to be updated
         // If yes, replace old quantity with the new quantity
         if (request.getQuantity() != null) {
             updateOrderCommand.setOrderQuantity(request.getQuantity());
+        } else {
+            updateOrderCommand.setOrderQuantity(existingOrder.getQuantity());
         }
 
         // 5. Save updated order into the database
         Order updatedOrder = orderCommandService.updateOrder(updateOrderCommand);
-
-        // 6. If customer and product have not been fetched then fetch
-        if (existingCustomer == null) {
-            existingCustomer = externalOrderService.getOrderSupplier(existingOrder.getSupplier());
-        }
-        if (existingProduct == null) {
-            existingProduct = externalOrderService.getOrderProduct(existingOrder.getProduct());
-        }
 
         return new OrderResponseDTO(updatedOrder, existingCustomer, existingProduct);
     }

@@ -13,7 +13,11 @@ public class CreateOrderCommand {
 
     public CreateOrderCommand() {}
 
-    public CreateOrderCommand(Integer orderQuantity, Long supplierId, Long productId) {
+    public CreateOrderCommand(
+            Integer orderQuantity,
+            Long supplierId,
+            Long productId
+    ) {
         this.orderQuantity = orderQuantity;
         this.supplierId = supplierId;
         this.productId = productId;

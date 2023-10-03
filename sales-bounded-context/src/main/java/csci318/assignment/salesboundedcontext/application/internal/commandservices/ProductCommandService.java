@@ -12,7 +12,10 @@ public class ProductCommandService {
     private final ProductQueryService productQueryService;
     private final ProductRepository productRepository;
 
-    public ProductCommandService(ProductQueryService productQueryService, ProductRepository productRepository) {
+    public ProductCommandService(
+            ProductQueryService productQueryService,
+            ProductRepository productRepository
+    ) {
         this.productQueryService = productQueryService;
         this.productRepository = productRepository;
     }
@@ -22,14 +25,15 @@ public class ProductCommandService {
     }
 
     public Product updateProduct(UpdateProductCommand updateProductCommand) {
-        Product product = productQueryService.findByProductId(updateProductCommand.getProductId());
+        Product product = productQueryService
+                .findByProductId(updateProductCommand.getProductId());
         product.updateProduct(updateProductCommand);
         return productRepository.save(product);
     }
 
-    public Product addOrderToProduct(Long productId, String orderId) {
+    public void addOrderToProduct(Long productId, String orderId) {
         Product existingProduct = productQueryService.findByProductId(productId);
         existingProduct.addCreatedOrders(orderId);
-        return productRepository.save(existingProduct);
+        productRepository.save(existingProduct);
     }
 }

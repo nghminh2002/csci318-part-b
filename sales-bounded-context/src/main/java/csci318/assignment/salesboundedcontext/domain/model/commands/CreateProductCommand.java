@@ -10,7 +10,12 @@ public class CreateProductCommand {
 
     public CreateProductCommand() {}
 
-    public CreateProductCommand(String productCategory, String name, Double price, ProductDetail productDetail) {
+    public CreateProductCommand(
+            String productCategory,
+            String name,
+            Double price,
+            ProductDetail productDetail
+    ) {
         this.productCategory = productCategory;
         this.name = name;
         this.price = price;
