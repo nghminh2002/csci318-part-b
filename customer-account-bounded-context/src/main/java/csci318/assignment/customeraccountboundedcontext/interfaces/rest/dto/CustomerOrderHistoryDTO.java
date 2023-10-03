@@ -32,11 +32,11 @@ public class CustomerOrderHistoryDTO {
     private final String position;
 
     @JsonProperty
-    private final List<ProductOrderResponseDTO> orderList;
+    private final List<OrderProductResponseDTO> orderList;
 
     public CustomerOrderHistoryDTO(
             Customer customer,
-            List<ProductOrderResponseDTO> orderList
+            List<OrderProductResponseDTO> orderList
     ) {
         this.customerId = customer.getId();
         this.companyName = customer.getCompanyName();

@@ -1,4 +1,4 @@
-# CSCI318 Group Assignment - Part B
+# CSCI318 Group Assignment - Part C
 - University of Wollongong
 - Campus Liverpool - South Western Sydney
 - CSCI318 - Software Engineering Practices & Principles
@@ -51,14 +51,15 @@ curl -X POST -H "Content-Type:application/json" -d "{\"companyName\":\"Company C
 which returns
 ```json
 {
-  "customerId":3,
-  "companyName":"Company C",
-  "address":"Queen St, Sydney, NSW",
-  "country":"Australia",
-  "name":"Milly",
-  "phone":"0123654987",
-  "email":"hmn123@gmail.com",
-  "position":"Student"
+  "customerId": 3,
+  "companyName": "Company C",
+  "address": "Queen St, Sydney, NSW",
+  "country": "Australia",
+  "name": "Milly",
+  "phone": "0123654987",
+  "email": "hmn123@gmail.com",
+  "position": "Student",
+  "numberOfCreatedOrders": 0
 }
 ```
 
@@ -71,14 +72,15 @@ curl -X PUT -H "Content-Type:application/json" -d "{\"address\": \"Oxford Ave, B
 which returns
 ```json
 {
-  "customerId":3,
-  "companyName":"Company C",
-  "address":"Oxford Ave, Bankstown, NSW",
-  "country":"Australia",
-  "name":"Nguyen",
-  "phone":"0123654987",
-  "email":"hmn1234@gmail.com",
-  "position":"Student"
+  "customerId": 3,
+  "companyName": "Company C",
+  "address": "Oxford Ave, Bankstown, NSW",
+  "country": "Australia",
+  "name": "Nguyen",
+  "phone": "0123654987",
+  "email": "hmn1234@gmail.com",
+  "position": "Student",
+  "numberOfCreatedOrders": 0
 }
 ```
 
@@ -90,14 +92,15 @@ curl -X GET http://localhost:8080/customer/1
 which returns
 ```json
 {
-  "customerId":1,
-  "companyName":"Company A",
-  "address":"Moore St, Liverpool, NSW",
-  "country":"Australia",
-  "name":"Hue Minh Nguyen",
-  "phone":"0123456789",
-  "email":"hmn998@uowmail.edu.au",
-  "position":"Technical Support"
+  "customerId": 1,
+  "companyName": "Company A",
+  "address": "Moore St, Liverpool, NSW",
+  "country": "Australia",
+  "name": "Hue Minh Nguyen",
+  "phone": "0123456789",
+  "email": "hmn998@uowmail.edu.au",
+  "position": "Technical Support",
+  "numberOfCreatedOrders": 0
 }
 ```
 
@@ -109,36 +112,62 @@ which returns
 ```json
 [
   {
-    "customerId":1,
-    "companyName":"Company A",
-    "address":"Moore St, Liverpool, NSW",
-    "country":"Australia",
-    "name":"Hue Minh Nguyen",
-    "phone":"0123456789",
-    "email":"hmn998@uowmail.edu.au",
-    "position":"Technical Support"
+    "customerId": 1,
+    "companyName": "Company A",
+    "address": "Moore St, Liverpool, NSW",
+    "country": "Australia",
+    "name": "Hue Minh Nguyen",
+    "phone": "0123456789",
+    "email": "hmn998@uowmail.edu.au",
+    "position": "Technical Support",
+    "numberOfCreatedOrders": 0
   },
   {
-    "customerId":2,
-    "companyName":"Company B",
-    "address":"King St, Melbourne, VIC",
-    "country":"Australia",
-    "name":"Nguyen Hue Minh",
-    "phone":"0987654321",
-    "email":"hmn998@gmail.com",
-    "position":"Software Engineer"
+    "customerId": 2,
+    "companyName": "Company B",
+    "address": "King St, Melbourne, VIC",
+    "country": "Australia",
+    "name": "Nguyen Hue Minh",
+    "phone": "0987654321",
+    "email": "hmn998@gmail.com",
+    "position": "Software Engineer",
+    "numberOfCreatedOrders": 0
   },
   {
-    "customerId":3,
-    "companyName":"Company C",
-    "address":"Oxford Ave, Bankstown, NSW",
-    "country":"Australia",
-    "name":"Nguyen",
-    "phone":"0123654987",
-    "email":"hmn1234@gmail.com",
-    "position":"Student"
+    "customerId": 3,
+    "companyName": "Company C",
+    "address": "Oxford Ave, Bankstown, NSW",
+    "country": "Australia",
+    "name": "Nguyen",
+    "phone": "0123654987",
+    "email": "hmn1234@gmail.com",
+    "position": "Student",
+    "numberOfCreatedOrders": 0
   }
 ]
+```
+
+__5. Get customer's order history__
+- get customer with `ID = 1`
+- communications:
+  + communicate with procurement-bounded-context to get order data
+  + procurement-bounded-context communicate with sales-bounded-context to get product data
+```shell
+curl -X GET http://localhost:8080/customer/1/order-history
+```
+which returns
+```json
+{
+  "customerId": 1,
+  "companyName": "Company A",
+  "address": "Moore St, Liverpool, NSW",
+  "country": "Australia",
+  "name": "Hue Minh Nguyen",
+  "phone": "0123456789",
+  "email": "hmn998@uowmail.edu.au",
+  "position": "Technical Support",
+  "orderList": []
+}
 ```
 
 #### II. sales-bounded-context
@@ -159,46 +188,13 @@ curl -X GET http://localhost:8081/product/1/all-orders
 which returns
 ```json
 {
-  "productId":1,
-  "productCategory":"Meat",
-  "name":"Chicken",
-  "price":15.2,
-  "description":"Free cage chicken",
-  "comment":"Produced in Australia",
-  "orderList":[
-    {
-      "orderId":1,
-      "supplier":{
-        "id":1,
-        "companyName":"Company A",
-        "address":"Moore St, Liverpool, NSW",
-        "country":"Australia",
-        "contact":{
-          "name":"Hue Minh Nguyen",
-          "phone":"0123456789",
-          "email":"hmn998@uowmail.edu.au",
-          "position":"Technical Support"
-        }
-      },
-      "quantity":10
-    },
-    {
-      "orderId":2,
-      "supplier":{
-        "id":2,
-        "companyName":"Company B",
-        "address":"King St, Melbourne, VIC",
-        "country":"Australia",
-        "contact":{
-          "name":"Nguyen Hue Minh",
-          "phone":"0987654321",
-          "email":"hmn998@gmail.com",
-          "position":"Software Engineer"
-        }
-      },
-      "quantity":100
-    }
-  ]
+  "productId": 1,
+  "productCategory": "Meat",
+  "name": "Chicken",
+  "price": 15.2,
+  "description": "Free cage chicken",
+  "comment": "Produced in Australia",
+  "orderList": []
 }
 ```
 
@@ -210,13 +206,13 @@ curl -X POST -H "Content-Type:application/json" -d "{\"productCategory\":\"Fruit
 which returns
 ```json
 {
-  "productId":3,
-  "productCategory":"Fruit",
-  "name":"Banana",
-  "price":15.2,
-  "description":"Made in Australia",
-  "comment":"Unripe",
-  "numberOfCreatedOrders":0
+  "productId": 3,
+  "productCategory": "Fruit",
+  "name": "Banana",
+  "price": 15.2,
+  "description": "Made in Australia",
+  "comment": "Unripe",
+  "numberOfCreatedOrders": 0
 }
 ```
 
@@ -229,13 +225,13 @@ curl -X PUT -H "Content-Type:application/json" -d "{\"productCategory\":\"Vegeta
 which returns
 ```json
 {
-  "productId":3,
-  "productCategory":"Vegetable",
-  "name":"Eggplant",
-  "price":15.2,
-  "description":"Purple Vegetable",
-  "comment":"Unripe",
-  "numberOfCreatedOrders":0
+  "productId": 3,
+  "productCategory": "Vegetable",
+  "name": "Eggplant",
+  "price": 15.2,
+  "description": "Purple Vegetable",
+  "comment": "Unripe",
+  "numberOfCreatedOrders": 0
 }
 ```
 
@@ -247,13 +243,13 @@ curl -X GET http://localhost:8081/product/1
 which returns
 ```json
 {
-  "productId":1,
-  "productCategory":"Meat",
-  "name":"Chicken",
-  "price":15.2,
-  "description":"Free cage chicken",
-  "comment":"Produced in Australia",
-  "numberOfCreatedOrders":2
+  "productId": 1,
+  "productCategory": "Meat",
+  "name": "Chicken",
+  "price": 15.2,
+  "description": "Free cage chicken",
+  "comment": "Produced in Australia",
+  "numberOfCreatedOrders": 0
 }
 ```
 
@@ -265,29 +261,31 @@ which returns
 ```json
 [
   {
-    "productId":1,
-    "productCategory":"Meat",
-    "name":"Chicken",
-    "price":15.2,
-    "description":"Free cage chicken",
-    "comment":"Produced in Australia",
-    "numberOfCreatedOrders":2
-  },{
-    "productId":2,
-    "productCategory":"Vegetable",
-    "name":"Carrot",
-    "price":5.0,
-    "description":"Orange Vegetable",
-    "comment":"Grown Locally",
-    "numberOfCreatedOrders":1
-  },{
-    "productId":3,
-    "productCategory":"Vegetable",
-    "name":"Eggplant",
-    "price":15.2,
-    "description":"Purple Vegetable",
-    "comment":"Unripe",
-    "numberOfCreatedOrders":0
+    "productId": 1,
+    "productCategory": "Meat",
+    "name": "Chicken",
+    "price": 15.2,
+    "description": "Free cage chicken",
+    "comment": "Produced in Australia",
+    "numberOfCreatedOrders": 0
+  },
+  {
+    "productId": 2,
+    "productCategory": "Vegetable",
+    "name": "Carrot",
+    "price": 5.0,
+    "description": "Orange Vegetable",
+    "comment": "Grown Locally",
+    "numberOfCreatedOrders": 0
+  },
+  {
+    "productId": 3,
+    "productCategory": "Vegetable",
+    "name": "Eggplant",
+    "price": 15.2,
+    "description": "Purple Vegetable",
+    "comment": "Unripe",
+    "numberOfCreatedOrders": 0
   }
 ]
 ```
@@ -312,17 +310,15 @@ curl -X POST -H "Content-Type:application/json" -d "{\"supplier\":2, \"product\"
 which returns
 ```json
 {
-  "orderId":4,
-  "supplier":2,
-  "product":1,
-  "quantity":12,
-  "companyName":"Company B",
-  "address":"King St, Melbourne, VIC",
-  "country":"Australia",
-  "productCategory":"Meat",
-  "name":"Chicken",
-  "price":15.2
-} 
+  "orderId": "C1ADAF8D",
+  "quantity": 12,
+  "companyName": "Company B",
+  "address": "King St, Melbourne, VIC",
+  "country": "Australia",
+  "productCategory": "Meat",
+  "name": "Chicken",
+  "price": 15.2
+}
 ```
 Check if a new order is added into created orders list of the product with `ID = 1`
 ```shell
@@ -331,65 +327,68 @@ curl -X GET http://localhost:8081/product/1/all-orders
 now returns
 ```json
 {
-  "productId":1,
-  "productCategory":"Meat",
-  "name":"Chicken",
-  "price":15.2,
-  "description":"Free cage chicken",
-  "comment":"Produced in Australia",
-  "orderList":[
+  "productId": 1,
+  "productCategory": "Meat",
+  "name": "Chicken",
+  "price": 15.2,
+  "description": "Free cage chicken",
+  "comment": "Produced in Australia",
+  "orderList": [
     {
-      "orderId":1,
-      "supplier":{
-        "id":1,
-        "companyName":"Company A",
-        "address":"Moore St, Liverpool, NSW",
-        "country":"Australia",
-        "contact":{
-          "name":"Hue Minh Nguyen",
-          "phone":"0123456789",
-          "email":"hmn998@uowmail.edu.au",
-          "position":"Technical Support"
+      "orderId": "C1ADAF8D",
+      "supplier": {
+        "id": 2,
+        "companyName": "Company B",
+        "address": "King St, Melbourne, VIC",
+        "country": "Australia",
+        "contact": {
+          "name": "Nguyen Hue Minh",
+          "phone": "0987654321",
+          "email": "hmn998@gmail.com",
+          "position": "Software Engineer"
         }
       },
-      "quantity":10
-    },
-    {
-      "orderId":2,
-      "supplier":{
-        "id":2,
-        "companyName":"Company B",
-        "address":"King St, Melbourne, VIC",
-        "country":"Australia",
-        "contact":{
-          "name":"Nguyen Hue Minh",
-          "phone":"0987654321",
-          "email":"hmn998@gmail.com",
-          "position":"Software Engineer"
-        }
-      },
-      "quantity":100
-    },
-    {
-      "orderId":4,
-      "supplier":{
-        "id":2,
-        "companyName":"Company B",
-        "address":"King St, Melbourne, VIC",
-        "country":"Australia",
-        "contact":{
-          "name":"Nguyen Hue Minh",
-          "phone":"0987654321",
-          "email":"hmn998@gmail.com",
-          "position":"Software Engineer"
-        }
-      },
-      "quantity":12
+      "quantity": 12
     }
   ]
 }
 ```
-A new order with `ID = 4` has been added
+A new order` has been added
+
+Check if a new order is added into created orders list of the customer with `ID = 2`
+```shell
+curl -X GET http://localhost:8080/customer/2/order-history
+```
+now returns
+```json
+{
+  "customerId": 2,
+  "companyName": "Company B",
+  "address": "King St, Melbourne, VIC",
+  "country": "Australia",
+  "name": "Nguyen Hue Minh",
+  "phone": "0987654321",
+  "email": "hmn998@gmail.com",
+  "position": "Software Engineer",
+  "orderList": [
+    {
+      "orderId": "C1ADAF8D",
+      "product": {
+        "id": 1,
+        "productCategory": "Meat",
+        "name": "Chicken",
+        "price": 15.2,
+        "productDetail": {
+          "description": "Free cage chicken",
+          "comment": "Produced in Australia"
+        }
+      },
+      "quantity": 12
+    }
+  ]
+}
+```
+A new order with has been added
 
 __2. Update order__
 - update order having `ID = 4`
@@ -398,21 +397,19 @@ __2. Update order__
   + communicate with customer-account-bounded-context to get customer data
   + communicate with sales-bounded-context to get product data
 ```shell
-curl -X PUT -H "Content-Type:application/json" -d "{\"quantity\": 120}" http://localhost:8082/order/4
+curl -X PUT -H "Content-Type:application/json" -d "{\"quantity\": 120}" http://localhost:8082/order/C1ADAF8D
 ```
 which returns
 ```json
 {
-  "orderId":4,
-  "supplier":2,
-  "product":1,
-  "quantity":120,
-  "companyName":"Company B",
-  "address":"King St, Melbourne, VIC",
-  "country":"Australia",
-  "productCategory":"Meat",
-  "name":"Chicken",
-  "price":15.2
+  "orderId": "C1ADAF8D",
+  "quantity": 120,
+  "companyName": "Company B",
+  "address": "King St, Melbourne, VIC",
+  "country": "Australia",
+  "productCategory": "Meat",
+  "name": "Chicken",
+  "price": 15.2
 }
 ```
 
@@ -422,19 +419,19 @@ __3. Get order by id__
   + communicate with customer-account-bounded-context to get customer data
   + communicate with sales-bounded-context to get product data
 ```shell
-curl -X GET http://localhost:8082/order/1
+curl -X GET http://localhost:8082/order/C1ADAF8D
 ```
 which returns
 ```json
 {
-  "orderId":"B1A7E465",
-  "quantity":12,
-  "companyName":"Company B",
-  "address":"King St, Melbourne, VIC",
-  "country":"Australia",
-  "productCategory":"Meat",
-  "name":"Chicken",
-  "price":15.2
+  "orderId": "C1ADAF8D",
+  "quantity": 120,
+  "companyName": "Company B",
+  "address": "King St, Melbourne, VIC",
+  "country": "Australia",
+  "productCategory": "Meat",
+  "name": "Chicken",
+  "price": 15.2
 }
 ```
 
@@ -449,14 +446,14 @@ which returns
 ```json
 [
   {
-    "orderId":"B1A7E465",
-    "quantity":12,
-    "companyName":"Company B",
-    "address":"King St, Melbourne, VIC",
-    "country":"Australia",
-    "productCategory":"Meat",
-    "name":"Chicken",
-    "price":15.2
+    "orderId": "C1ADAF8D",
+    "quantity": 120,
+    "companyName": "Company B",
+    "address": "King St, Melbourne, VIC",
+    "country": "Australia",
+    "productCategory": "Meat",
+    "name": "Chicken",
+    "price": 15.2
   }
 ]
 ```

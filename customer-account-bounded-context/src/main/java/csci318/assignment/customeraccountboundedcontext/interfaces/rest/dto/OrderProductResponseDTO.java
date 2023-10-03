@@ -1,14 +1,14 @@
 package csci318.assignment.customeraccountboundedcontext.interfaces.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import csci318.assignment.customeraccountboundedcontext.domain.model.aggregates.Customer;
+import csci318.assignment.customeraccountboundedcontext.domain.model.entities.Product;
 
-public class ProductOrderResponseDTO {
+public class OrderProductResponseDTO {
     @JsonProperty
     private String orderId;
 
     @JsonProperty
-    private Customer supplier;
+    private Product product;
 
     @JsonProperty
     private Integer quantity;

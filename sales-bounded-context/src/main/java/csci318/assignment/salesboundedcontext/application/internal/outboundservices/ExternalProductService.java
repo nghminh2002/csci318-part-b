@@ -16,7 +16,7 @@ public class ExternalProductService {
     }
 
     public List<OrderCustomerResponseDTO> getAllOrdersHavingProduct(List<String> orderIds) {
-        final String url = "http://localhost:8082/order/internal/";
+        final String url = "http://localhost:8082/order/internal/order-customer/";
         List<OrderCustomerResponseDTO> orders = new ArrayList<>();
         for (String id : orderIds) {
             orders.add(restTemplate.getForObject(url + id, OrderCustomerResponseDTO.class));

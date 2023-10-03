@@ -7,7 +7,7 @@ import csci318.assignment.customeraccountboundedcontext.domain.model.aggregates.
 import csci318.assignment.customeraccountboundedcontext.interfaces.rest.dto.CustomerOrderHistoryDTO;
 import csci318.assignment.customeraccountboundedcontext.interfaces.rest.dto.CustomerRequestDTO;
 import csci318.assignment.customeraccountboundedcontext.interfaces.rest.dto.CustomerResponseDTO;
-import csci318.assignment.customeraccountboundedcontext.interfaces.rest.dto.ProductOrderResponseDTO;
+import csci318.assignment.customeraccountboundedcontext.interfaces.rest.dto.OrderProductResponseDTO;
 import csci318.assignment.customeraccountboundedcontext.interfaces.rest.transform.CustomerCommandDTOAssembler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -91,7 +91,7 @@ public class CustomerController {
             @PathVariable Long customerId
     ) {
         Customer existingCustomer = customerQueryService.findByCustomerId(customerId);
-        List<ProductOrderResponseDTO> createdOrders = externalCustomerService
+        List<OrderProductResponseDTO> createdOrders = externalCustomerService
                 .getCustomerOrderHistory(existingCustomer.getCreatedOrders());
         return new CustomerOrderHistoryDTO(existingCustomer, createdOrders);
     }

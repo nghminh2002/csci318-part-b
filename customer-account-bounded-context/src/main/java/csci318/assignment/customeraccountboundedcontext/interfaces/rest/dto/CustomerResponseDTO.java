@@ -29,6 +29,9 @@ public class CustomerResponseDTO {
     @JsonProperty
     private final String position;
 
+    @JsonProperty
+    private final Integer numberOfCreatedOrders;
+
     public CustomerResponseDTO(Customer customer) {
         this.customerId = customer.getId();
         this.companyName = customer.getCompanyName();
@@ -39,5 +42,6 @@ public class CustomerResponseDTO {
         this.phone = contact.getPhone();
         this.email = contact.getEmail();
         this.position = contact.getPosition();
+        this.numberOfCreatedOrders = customer.getCreatedOrders().size();
     }
 }
