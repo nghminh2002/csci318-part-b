@@ -32,7 +32,7 @@ public class CustomerResponseDTO {
     public CustomerResponseDTO(Customer customer) {
         this.customerId = customer.getId();
         this.companyName = customer.getCompanyName();
-        this.address = customer.getAddress().toString();
+        this.address = customer.getAddress();
         this.country = customer.getCountry();
         Contact contact = customer.getContact();
         this.name = contact.getName();

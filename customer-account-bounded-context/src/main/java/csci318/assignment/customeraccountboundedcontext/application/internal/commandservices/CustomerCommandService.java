@@ -12,7 +12,10 @@ public class CustomerCommandService {
     private final CustomerQueryService customerQueryService;
     private final CustomerRepository customerRepository;
 
-    public CustomerCommandService(CustomerQueryService customerQueryService, CustomerRepository customerRepository) {
+    public CustomerCommandService(
+            CustomerQueryService customerQueryService,
+            CustomerRepository customerRepository
+    ) {
         this.customerQueryService = customerQueryService;
         this.customerRepository = customerRepository;
     }
@@ -22,14 +25,16 @@ public class CustomerCommandService {
     }
 
     public Customer updateCustomer(UpdateCustomerCommand updateCustomerCommand) {
-        Customer customer = customerQueryService.findByCustomerId(updateCustomerCommand.getCustomerId());
+        Customer customer = customerQueryService.findByCustomerId(
+                updateCustomerCommand.getCustomerId()
+        );
         customer.updateCustomer(updateCustomerCommand);
         return customerRepository.save(customer);
     }
 
-    public Customer addOrderToCustomer(Long customerId, String orderId) {
+    public void addOrderToCustomer(Long customerId, String orderId) {
         Customer existingCustomer = customerQueryService.findByCustomerId(customerId);
         existingCustomer.addCreatedOrders(orderId);
-        return customerRepository.save(existingCustomer);
+        customerRepository.save(existingCustomer);
     }
 }

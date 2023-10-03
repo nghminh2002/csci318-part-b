@@ -19,11 +19,15 @@ public class CustomerEventPublisherService {
 
     @TransactionalEventListener
     public void handleCustomerCreatedEvent(CustomerCreatedEvent customerCreatedEvent){
-        customerEventSource.customerCreating().send(MessageBuilder.withPayload(customerCreatedEvent).build());
+        customerEventSource
+                .customerCreating()
+                .send(MessageBuilder.withPayload(customerCreatedEvent).build());
     }
 
     @TransactionalEventListener
     public void handleCustomerUpdatedEvent(CustomerUpdatedEvent customerUpdatedEvent){
-        customerEventSource.customerUpdating().send(MessageBuilder.withPayload(customerUpdatedEvent).build());
+        customerEventSource
+                .customerUpdating()
+                .send(MessageBuilder.withPayload(customerUpdatedEvent).build());
     }
 }

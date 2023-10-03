@@ -34,7 +34,10 @@ public class CustomerOrderHistoryDTO {
     @JsonProperty
     private final List<ProductOrderResponseDTO> orderList;
 
-    public CustomerOrderHistoryDTO(Customer customer, List<ProductOrderResponseDTO> orderList) {
+    public CustomerOrderHistoryDTO(
+            Customer customer,
+            List<ProductOrderResponseDTO> orderList
+    ) {
         this.customerId = customer.getId();
         this.companyName = customer.getCompanyName();
         this.address = customer.getAddress();

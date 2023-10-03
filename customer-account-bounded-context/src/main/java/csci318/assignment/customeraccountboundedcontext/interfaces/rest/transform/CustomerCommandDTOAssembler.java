@@ -27,7 +27,9 @@ public class CustomerCommandDTOAssembler {
             Customer originalCustomer,
             CustomerRequestDTO request
     ) {
-        UpdateCustomerCommand updateCustomerCommand = new UpdateCustomerCommand(originalCustomer.getId());
+        UpdateCustomerCommand updateCustomerCommand = new UpdateCustomerCommand(
+                originalCustomer.getId()
+        );
         // 1. Check if the company name needs to be updated
         // If yes, replace old company with the new company name
         if (request.getCompanyName() != null) {

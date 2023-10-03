@@ -14,11 +14,10 @@ public class CustomerInternalController {
     private final CustomerQueryService customerQueryService;
 
     public CustomerInternalController(CustomerQueryService customerQueryService) {
-
         this.customerQueryService = customerQueryService;
     }
 
-//    Use case: Get customer by id
+//  Use case: Get customer by id
     @GetMapping("/{customerId}")
     Customer getCustomer(@PathVariable Long customerId) {
         return customerQueryService.findByCustomerId(customerId);

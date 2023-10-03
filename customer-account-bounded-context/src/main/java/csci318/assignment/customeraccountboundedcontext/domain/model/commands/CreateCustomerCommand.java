@@ -10,7 +10,12 @@ public class CreateCustomerCommand {
 
     public CreateCustomerCommand() {}
 
-    public CreateCustomerCommand(String companyName, String address, String country, Contact contact) {
+    public CreateCustomerCommand(
+            String companyName,
+            String address,
+            String country,
+            Contact contact
+    ) {
         this.companyName = companyName;
         this.address = address;
         this.country = country;

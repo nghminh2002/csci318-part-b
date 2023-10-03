@@ -42,7 +42,9 @@ public class CustomerController {
 //  Use case: Create customer
     @PostMapping()
     @ResponseBody
-    public CustomerResponseDTO createCustomer(@RequestBody CustomerRequestDTO request) {
+    public CustomerResponseDTO createCustomer(
+            @RequestBody CustomerRequestDTO request
+    ) {
         Customer newCustomer = customerCommandService.createCustomer(
                 CustomerCommandDTOAssembler.toCommandFromDTO(request)
         );
@@ -66,7 +68,9 @@ public class CustomerController {
 //  Use case: Get customer by id
     @GetMapping("/{customerId}")
     @ResponseBody
-    CustomerResponseDTO getCustomer(@PathVariable Long customerId) {
+    CustomerResponseDTO getCustomer(
+            @PathVariable Long customerId
+    ) {
         Customer existingCustomer = customerQueryService.findByCustomerId(customerId);
         return new CustomerResponseDTO(existingCustomer);
     }
@@ -87,8 +91,8 @@ public class CustomerController {
             @PathVariable Long customerId
     ) {
         Customer existingCustomer = customerQueryService.findByCustomerId(customerId);
-        List<ProductOrderResponseDTO> createdOrders =
-                externalCustomerService.getCustomerOrderHistory(existingCustomer.getCreatedOrders());
+        List<ProductOrderResponseDTO> createdOrders = externalCustomerService
+                .getCustomerOrderHistory(existingCustomer.getCreatedOrders());
         return new CustomerOrderHistoryDTO(existingCustomer, createdOrders);
     }
 }
