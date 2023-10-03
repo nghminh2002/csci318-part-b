@@ -50,7 +50,8 @@ public class ProductCreatedEventData {
     @Override
     public String toString() {
         return "ProductCreatedEventData{" +
-                "productId=" + productId +
+                "eventName='" + eventName + '\'' +
+                ", productId=" + productId +
                 ", productCategory='" + productCategory + '\'' +
                 ", productName='" + productName + '\'' +
                 '}';

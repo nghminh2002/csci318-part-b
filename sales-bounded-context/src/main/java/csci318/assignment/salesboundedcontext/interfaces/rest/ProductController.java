@@ -28,7 +28,11 @@ public class ProductController {
     private final ProductQueryService productQueryService;
     private final ExternalProductService externalProductService;
 
-    public ProductController(ProductCommandService productCommandService, ProductQueryService productQueryService, ExternalProductService externalProductService) {
+    public ProductController(
+            ProductCommandService productCommandService,
+            ProductQueryService productQueryService,
+            ExternalProductService externalProductService
+    ) {
         this.productCommandService = productCommandService;
         this.productQueryService = productQueryService;
         this.externalProductService = externalProductService;
@@ -40,7 +44,9 @@ public class ProductController {
     public ProductResponseDTO createProduct(
             @RequestBody ProductRequestDTO request
     ) {
-        Product newProduct = productCommandService.createProduct(ProductCommandDTOAssembler.toCommandFromDTO(request));
+        Product newProduct = productCommandService.createProduct(
+                ProductCommandDTOAssembler.toCommandFromDTO(request)
+        );
         return new ProductResponseDTO(newProduct);
     }
 

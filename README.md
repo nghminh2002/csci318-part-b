@@ -427,15 +427,36 @@ curl -X GET http://localhost:8082/order/1
 which returns
 ```json
 {
-  "orderId":1,
-  "supplier":1,
-  "product":1,
-  "quantity":10,
-  "companyName":"Company A",
-  "address":"Moore St, Liverpool, NSW",
+  "orderId":"B1A7E465",
+  "quantity":12,
+  "companyName":"Company B",
+  "address":"King St, Melbourne, VIC",
   "country":"Australia",
   "productCategory":"Meat",
   "name":"Chicken",
   "price":15.2
 }
+```
+
+__3. Get all orders__
+- communications:
+  + communicate with customer-account-bounded-context to get customer data
+  + communicate with sales-bounded-context to get product data
+```shell
+curl -X GET http://localhost:8082/order   
+```
+which returns
+```json
+[
+  {
+    "orderId":"B1A7E465",
+    "quantity":12,
+    "companyName":"Company B",
+    "address":"King St, Melbourne, VIC",
+    "country":"Australia",
+    "productCategory":"Meat",
+    "name":"Chicken",
+    "price":15.2
+  }
+]
 ```

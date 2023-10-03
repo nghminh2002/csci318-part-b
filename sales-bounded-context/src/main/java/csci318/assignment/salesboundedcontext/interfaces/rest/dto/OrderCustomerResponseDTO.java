@@ -5,7 +5,7 @@ import csci318.assignment.salesboundedcontext.domain.model.entities.Customer;
 
 public class OrderCustomerResponseDTO {
     @JsonProperty
-    private Long orderId;
+    private String orderId;
 
     @JsonProperty
     private Customer supplier;
