@@ -13,6 +13,7 @@
         <module>procurement-bounded-context</module>
         <module>sales-bounded-context</module>
         <module>analytics-bounded-context</module>
+        <module>demo-data</module>
     </modules>
 
     <properties>
