@@ -48,14 +48,15 @@ Please ensure you follow the above sequence to maintain data integrity and ensur
 This version includes the entity, value object, aggregate, event and domain service patterns and communications between services. 
 
 ### I. customer-account-bounded-context
-The __customer-account-bounded-context__ implements two ways of publishing and handling domain events which are enabled in Spring Boot, 
-i.e., the `AbstractAggregateRoot` generic class and the `ApplicationEventPublisher` interface. This also contains patterns 
-including entity, value object, aggregate, event and domain service.
+The **customer-account-bounded-context** contains patterns including entity, value object, aggregate, event and domain service.
 
 Demonstrating Use Cases
 
-__1. Create new customer with contact__
-- event patterns: New event called __Create__ is created (check CUSTOMER_EVENT in h2-console)
+#### 1. Create new customer with contact
+- event patterns: new **CustomerCreatedEvent** was created (check Analytics Bounded Context console)
+- messaging
+  + analytics-bounded-context listen to CustomerCreatedEvent to generate the summary from customer data
+
 ```shell
 curl -X POST -H "Content-Type:application/json" -d "{\"companyName\":\"Company C\", \"address\": \"Queen St, Sydney, NSW\", \"country\": \"Australia\", \"name\":\"Milly\", \"phone\": \"0123654987\", \"email\":\"hmn123@gmail.com\", \"position\":\"Student\"}" http://localhost:8080/customer
 ```
@@ -74,9 +75,9 @@ which returns
 }
 ```
 
-__2. Update customer__
+#### 2. Update customer
 - update customer with `ID = 3`
-- event patterns: New event called __Update__ is created (check CUSTOMER_EVENT in h2-console)
+- event patterns: new **CustomerUpdatedEvent** was created
 ```shell
 curl -X PUT -H "Content-Type:application/json" -d "{\"address\": \"Oxford Ave, Bankstown, NSW\", \"name\":\"Nguyen\", \"email\":\"hmn1234@gmail.com\"}" http://localhost:8080/customer/3
 ```
@@ -95,12 +96,12 @@ which returns
 }
 ```
 
-__3. Get customer by id__
+#### 3. Get customer by id
 - get customer with `ID = 1`
 ```shell
 curl -X GET http://localhost:8080/customer/1
 ```
-which returns
+which may return
 ```json
 {
   "customerId": 1,
@@ -111,15 +112,16 @@ which returns
   "phone": "0123456789",
   "email": "hmn998@uowmail.edu.au",
   "position": "Technical Support",
-  "numberOfCreatedOrders": 0
+  "numberOfCreatedOrders": 2
 }
 ```
+The **numberOfCreatedOrders** may be different because orders were created randomly.
 
-__4. Get all customers__
+#### 4. Get all customers
 ```shell
 curl -X GET http://localhost:8080/customer 
 ```
-which returns
+which may return
 ```json
 [
   {
@@ -131,7 +133,7 @@ which returns
     "phone": "0123456789",
     "email": "hmn998@uowmail.edu.au",
     "position": "Technical Support",
-    "numberOfCreatedOrders": 0
+    "numberOfCreatedOrders": 2
   },
   {
     "customerId": 2,
@@ -142,7 +144,7 @@ which returns
     "phone": "0987654321",
     "email": "hmn998@gmail.com",
     "position": "Software Engineer",
-    "numberOfCreatedOrders": 0
+    "numberOfCreatedOrders": 3
   },
   {
     "customerId": 3,
@@ -157,8 +159,9 @@ which returns
   }
 ]
 ```
+The **numberOfCreatedOrders** may be different because orders were created randomly.
 
-__5. Get customer's order history__
+#### 5. Get customer's order history
 - get customer with `ID = 1`
 - communications:
   + communicate with procurement-bounded-context to get order data
@@ -166,7 +169,7 @@ __5. Get customer's order history__
 ```shell
 curl -X GET http://localhost:8080/customer/1/order-history
 ```
-which returns
+which may return
 ```json
 {
   "customerId": 1,
@@ -177,47 +180,56 @@ which returns
   "phone": "0123456789",
   "email": "hmn998@uowmail.edu.au",
   "position": "Technical Support",
-  "orderList": []
+  "orderList": [
+    {
+      "orderId": "974094A0",
+      "product": {
+        "id": 5,
+        "productCategory": "Grain",
+        "name": "Rice",
+        "price": 1.5,
+        "productDetail": {
+          "description": "Long grain rice",
+          "comment": "Imported from Asia"
+        }
+      },
+      "quantity": 69
+    },
+    {
+      "orderId": "A243DD89",
+      "product": {
+        "id": 9,
+        "productCategory": "Dairy",
+        "name": "Cheese",
+        "price": 3.0,
+        "productDetail": {
+          "description": "Matured cheddar",
+          "comment": "Produced in France"
+        }
+      },
+      "quantity": 74
+    }
+  ]
 }
 ```
+The **numberOfCreatedOrders** and **orderId** may be different because orders were created randomly.
 
 ### II. sales-bounded-context
-The __sales-bounded-context__ implements two ways of publishing and handling domain events which are enabled in Spring Boot,
-i.e., the `AbstractAggregateRoot` generic class and the `ApplicationEventPublisher` interface. This also contains patterns
-including entity, value object, aggregate, event and domain service.
+The **sales-bounded-context** contains patterns including entity, value object, aggregate, event and domain service.
 
 Demonstrating Use Cases
 
-__1. Get all created orders containing a product__
-- get all created orders containing a product having `ID = 1`
-- communications:
-  + communicate with procurement-bounded-context to get order data
-  + procurement-bounded-context communicate with customer-account-bounded-context to get customer data
-```shell
-curl -X GET http://localhost:8081/product/1/all-orders
-```
-which returns
-```json
-{
-  "productId": 1,
-  "productCategory": "Meat",
-  "name": "Chicken",
-  "price": 15.2,
-  "description": "Free cage chicken",
-  "comment": "Produced in Australia",
-  "orderList": []
-}
-```
-
-__2. Create new product with product detail__
-- event patterns: New event called __Create__ is created (check PRODUCT_EVENT in h2-console)
+#### 1. Create new product with product detail
+- event patterns: new ProductCreatedEvent was created (check Analytics Bounded Context console)
+- messaging
+  + analytics-bounded-context listen to ProductCreatedEvent to generate the summary from product data
 ```shell
 curl -X POST -H "Content-Type:application/json" -d "{\"productCategory\":\"Fruit\", \"name\": \"Banana\", \"price\": 15.20, \"description\":\"Made in Australia\", \"comment\": \"Unripe\"}" http://localhost:8081/product
 ```
 which returns
 ```json
 {
-  "productId": 3,
+  "productId": 16,
   "productCategory": "Fruit",
   "name": "Banana",
   "price": 15.2,
@@ -227,16 +239,16 @@ which returns
 }
 ```
 
-__3. Update product and product detail__
-- update product with `ID = 3` and its detail
-- event patterns: New event called __Update__ is created (check PRODUCT_EVENT in h2-console)
+#### 2. Update product and product detail
+- update product with `ID = 16` and its detail
+- event patterns: new ProductUpdatedEvent was created
 ```shell
-curl -X PUT -H "Content-Type:application/json" -d "{\"productCategory\":\"Vegetable\", \"name\": \"Eggplant\", \"description\":\"Purple Vegetable\"}" http://localhost:8081/product/3
+curl -X PUT -H "Content-Type:application/json" -d "{\"productCategory\":\"Vegetable\", \"name\": \"Eggplant\", \"description\":\"Purple Vegetable\"}" http://localhost:8081/product/16
 ```
 which returns
 ```json
 {
-  "productId": 3,
+  "productId": 16,
   "productCategory": "Vegetable",
   "name": "Eggplant",
   "price": 15.2,
@@ -246,51 +258,169 @@ which returns
 }
 ```
 
-__4. Get product and its product detail using id__
+#### 3. Get product and its product detail using id
 - get product with `ID = 1` and its detail
 ```shell
 curl -X GET http://localhost:8081/product/1
 ```
-which returns
+which may return
 ```json
 {
   "productId": 1,
   "productCategory": "Meat",
   "name": "Chicken",
-  "price": 15.2,
+  "price": 10.5,
   "description": "Free cage chicken",
   "comment": "Produced in Australia",
   "numberOfCreatedOrders": 0
 }
 ```
+The **numberOfCreatedOrders** may be different because orders were created randomly.
 
-__5. Get all products__
+#### 4. Get all products
 ```shell
 curl -X GET http://localhost:8081/product 
 ```
-which returns
+which may return
 ```json
 [
   {
     "productId": 1,
     "productCategory": "Meat",
     "name": "Chicken",
-    "price": 15.2,
+    "price": 10.5,
     "description": "Free cage chicken",
     "comment": "Produced in Australia",
     "numberOfCreatedOrders": 0
   },
   {
     "productId": 2,
-    "productCategory": "Vegetable",
-    "name": "Carrot",
-    "price": 5.0,
-    "description": "Orange Vegetable",
-    "comment": "Grown Locally",
+    "productCategory": "Fruit",
+    "name": "Apple",
+    "price": 0.8,
+    "description": "Crispy red apple",
+    "comment": "Grown in USA",
     "numberOfCreatedOrders": 0
   },
   {
     "productId": 3,
+    "productCategory": "Vegetable",
+    "name": "Carrot",
+    "price": 0.5,
+    "description": "Orange crunchy carrot",
+    "comment": "Grown Locally",
+    "numberOfCreatedOrders": 0
+  },
+  {
+    "productId": 4,
+    "productCategory": "Dairy",
+    "name": "Milk",
+    "price": 1.2,
+    "description": "Fresh milk",
+    "comment": "Produced in Canada",
+    "numberOfCreatedOrders": 0
+  },
+  {
+    "productId": 5,
+    "productCategory": "Grain",
+    "name": "Rice",
+    "price": 1.5,
+    "description": "Long grain rice",
+    "comment": "Imported from Asia",
+    "numberOfCreatedOrders": 2
+  },
+  {
+    "productId": 6,
+    "productCategory": "Meat",
+    "name": "Beef",
+    "price": 15.0,
+    "description": "Grass-fed beef",
+    "comment": "Sourced from New Zealand",
+    "numberOfCreatedOrders": 0
+  },
+  {
+    "productId": 7,
+    "productCategory": "Fruit",
+    "name": "Orange",
+    "price": 0.7,
+    "description": "Juicy orange",
+    "comment": "Imported from Spain",
+    "numberOfCreatedOrders": 0
+  },
+  {
+    "productId": 8,
+    "productCategory": "Vegetable",
+    "name": "Broccoli",
+    "price": 1.3,
+    "description": "Green broccoli",
+    "comment": "Organic",
+    "numberOfCreatedOrders": 1
+  },
+  {
+    "productId": 9,
+    "productCategory": "Dairy",
+    "name": "Cheese",
+    "price": 3.0,
+    "description": "Matured cheddar",
+    "comment": "Produced in France",
+    "numberOfCreatedOrders": 1
+  },
+  {
+    "productId": 10,
+    "productCategory": "Grain",
+    "name": "Wheat",
+    "price": 0.9,
+    "description": "Healthy whole wheat",
+    "comment": "Grown in USA",
+    "numberOfCreatedOrders": 0
+  },
+  {
+    "productId": 11,
+    "productCategory": "Meat",
+    "name": "Pork",
+    "price": 12.0,
+    "description": "Organic pork",
+    "comment": "Sourced from Germany",
+    "numberOfCreatedOrders": 1
+  },
+  {
+    "productId": 12,
+    "productCategory": "Fruit",
+    "name": "Banana",
+    "price": 0.6,
+    "description": "Yellow ripe banana",
+    "comment": "Grown in Ecuador",
+    "numberOfCreatedOrders": 0
+  },
+  {
+    "productId": 13,
+    "productCategory": "Vegetable",
+    "name": "Spinach",
+    "price": 1.2,
+    "description": "Fresh spinach",
+    "comment": "Organic",
+    "numberOfCreatedOrders": 0
+  },
+  {
+    "productId": 14,
+    "productCategory": "Dairy",
+    "name": "Yogurt",
+    "price": 1.8,
+    "description": "Greek yogurt",
+    "comment": "Produced in Greece",
+    "numberOfCreatedOrders": 0
+  },
+  {
+    "productId": 15,
+    "productCategory": "Grain",
+    "name": "Oats",
+    "price": 0.7,
+    "description": "Rolled oats",
+    "comment": "Imported from Scotland",
+    "numberOfCreatedOrders": 0
+  },
+  {
+    "productId": 16,
     "productCategory": "Vegetable",
     "name": "Eggplant",
     "price": 15.2,
@@ -300,53 +430,111 @@ which returns
   }
 ]
 ```
+The **numberOfCreatedOrders** may be different because orders were created randomly.
+
+#### 5. Get all created orders containing a product
+- get all created orders containing a product having `ID = 5`
+- communications:
+  + communicate with procurement-bounded-context to get order data
+  + procurement-bounded-context communicate with customer-account-bounded-context to get customer data
+```shell
+curl -X GET http://localhost:8081/product/5/all-orders
+```
+which may return
+```json
+{
+  "productId": 5,
+  "productCategory": "Grain",
+  "name": "Rice",
+  "price": 1.5,
+  "description": "Long grain rice",
+  "comment": "Imported from Asia",
+  "orderList": [
+    {
+      "orderId": "974094A0",
+      "supplier": {
+        "id": 1,
+        "companyName": "Company A",
+        "address": "Moore St, Liverpool, NSW",
+        "country": "Australia",
+        "contact": {
+          "name": "Hue Minh Nguyen",
+          "phone": "0123456789",
+          "email": "hmn998@uowmail.edu.au",
+          "position": "Technical Support"
+        }
+      },
+      "quantity": 69
+    },
+    {
+      "orderId": "BA87531F",
+      "supplier": {
+        "id": 2,
+        "companyName": "Company B",
+        "address": "King St, Melbourne, VIC",
+        "country": "Australia",
+        "contact": {
+          "name": "Nguyen Hue Minh",
+          "phone": "0987654321",
+          "email": "hmn998@gmail.com",
+          "position": "Software Engineer"
+        }
+      },
+      "quantity": 96
+    }
+  ]
+}
+```
+The **orderList** may be different because orders were created randomly.
 
 ### III. procurement-bounded-context
-The __procurement-bounded-context__ implements two ways of publishing and handling 
-domain events which are enabled in Spring Boot, i.e., the `AbstractAggregateRoot` generic class and the 
-`ApplicationEventPublisher` interface.
+The **procurement-bounded-context** contains patterns including entity, value object, aggregate, event and domain service.
 
 Demonstrating Use Cases
 
-__1. Create new order__
-- event patterns: New event called __Create__ is created (check ORDER_EVENT in h2-console)
-- communications: 
+#### 1. Create new order
+- event patterns: new OrderCreatedEvent was created (check Analytics Bounded Context console)
+- communications:
   + communicate with customer-account-bounded-context to get customer data
   + communicate with sales-bounded-context to get product data
-  + communicate with sales-bounded-context to add orderId to createdOrders for product object (check PRODUCT_EVENT in h2-console,
-a new event called "Order" was created as a new order for the product was made)
+- messaging
+  + customer-account-bounded-context listen to OrderCreatedEvent and update the created orders list of associated customer
+  + sales-bounded-context listen to OrderCreatedEvent and update the created orders list of associated product
+  + analytics-bounded-context listen to OrderCreatedEvent to generate the summary from order data
 ```shell
 curl -X POST -H "Content-Type:application/json" -d "{\"supplier\":2, \"product\": 1, \"quantity\": 12}" http://localhost:8082/order
 ```
-which returns
+which may return
 ```json
 {
-  "orderId": "C1ADAF8D",
+  "orderId": "E8078C01",
   "quantity": 12,
   "companyName": "Company B",
   "address": "King St, Melbourne, VIC",
   "country": "Australia",
   "productCategory": "Meat",
   "name": "Chicken",
-  "price": 15.2
+  "price": 10.5
 }
 ```
+The **orderId** may be different because orders were created randomly.
+
 Check if a new order is added into created orders list of the product with `ID = 1`
 ```shell
 curl -X GET http://localhost:8081/product/1/all-orders
 ```
-now returns
+now may return
 ```json
 {
   "productId": 1,
   "productCategory": "Meat",
   "name": "Chicken",
-  "price": 15.2,
+  "price": 10.5,
   "description": "Free cage chicken",
   "comment": "Produced in Australia",
   "orderList": [
     {
-      "orderId": "C1ADAF8D",
+      "orderId": "E8078C01",
       "supplier": {
         "id": 2,
         "companyName": "Company B",
@@ -364,13 +552,13 @@ now returns
   ]
 }
 ```
-A new order` has been added
+A new order has been added
 
 Check if a new order is added into created orders list of the customer with `ID = 2`
 ```shell
 curl -X GET http://localhost:8080/customer/2/order-history
 ```
-now returns
+now may return
 ```json
 {
   "customerId": 2,
@@ -383,12 +571,54 @@ now returns
   "position": "Software Engineer",
   "orderList": [
     {
-      "orderId": "C1ADAF8D",
+      "orderId": "94F7640A",
+      "product": {
+        "id": 11,
+        "productCategory": "Meat",
+        "name": "Pork",
+        "price": 12.0,
+        "productDetail": {
+          "description": "Organic pork",
+          "comment": "Sourced from Germany"
+        }
+      },
+      "quantity": 21
+    },
+    {
+      "orderId": "60480D8D",
+      "product": {
+        "id": 8,
+        "productCategory": "Vegetable",
+        "name": "Broccoli",
+        "price": 1.3,
+        "productDetail": {
+          "description": "Green broccoli",
+          "comment": "Organic"
+        }
+      },
+      "quantity": 19
+    },
+    {
+      "orderId": "BA87531F",
+      "product": {
+        "id": 5,
+        "productCategory": "Grain",
+        "name": "Rice",
+        "price": 1.5,
+        "productDetail": {
+          "description": "Long grain rice",
+          "comment": "Imported from Asia"
+        }
+      },
+      "quantity": 96
+    },
+    {
+      "orderId": "E8078C01",
       "product": {
         "id": 1,
         "productCategory": "Meat",
         "name": "Chicken",
-        "price": 15.2,
+        "price": 10.5,
         "productDetail": {
           "description": "Free cage chicken",
           "comment": "Produced in Australia"
@@ -401,70 +631,121 @@ now returns
 ```
 A new order with has been added
 
-__2. Update order__
-- update order having `ID = 4`
-- event patterns: New event called __Update__ is created (check ORDER_EVENT in h2-console)
+#### 2. Update order
+- update order having `ID = E8078C01`. This id may not exist because the orderId was generated randomly. It would be different from time to time.
+- event patterns: new **OrderUpdatedEvent** was created
 - communications:
   + communicate with customer-account-bounded-context to get customer data
   + communicate with sales-bounded-context to get product data
 ```shell
-curl -X PUT -H "Content-Type:application/json" -d "{\"quantity\": 120}" http://localhost:8082/order/C1ADAF8D
+curl -X PUT -H "Content-Type:application/json" -d "{\"quantity\": 120}" http://localhost:8082/order/E8078C01
 ```
-which returns
+which may return
 ```json
 {
-  "orderId": "C1ADAF8D",
+  "orderId": "E8078C01",
   "quantity": 120,
   "companyName": "Company B",
   "address": "King St, Melbourne, VIC",
   "country": "Australia",
   "productCategory": "Meat",
   "name": "Chicken",
-  "price": 15.2
+  "price": 10.5
 }
 ```
 
-__3. Get order by id__
-- get order having `ID = 1`
+#### 3. Get order by id
+- get order having `ID = E8078C01`. This id may not exist because the orderId was generated randomly. It would be different from time to time.
 - communications:
   + communicate with customer-account-bounded-context to get customer data
   + communicate with sales-bounded-context to get product data
 ```shell
-curl -X GET http://localhost:8082/order/C1ADAF8D
+curl -X GET http://localhost:8082/order/E8078C01
 ```
-which returns
+which may return
 ```json
 {
-  "orderId": "C1ADAF8D",
+  "orderId": "E8078C01",
   "quantity": 120,
   "companyName": "Company B",
   "address": "King St, Melbourne, VIC",
   "country": "Australia",
   "productCategory": "Meat",
   "name": "Chicken",
-  "price": 15.2
+  "price": 10.5
 }
 ```
 
-__3. Get all orders__
+#### 4. Get all orders
 - communications:
   + communicate with customer-account-bounded-context to get customer data
   + communicate with sales-bounded-context to get product data
 ```shell
 curl -X GET http://localhost:8082/order   
 ```
-which returns
+which may return
 ```json
 [
   {
-    "orderId": "C1ADAF8D",
+    "orderId": "974094A0",
+    "quantity": 69,
+    "companyName": "Company A",
+    "address": "Moore St, Liverpool, NSW",
+    "country": "Australia",
+    "productCategory": "Grain",
+    "name": "Rice",
+    "price": 1.5
+  },
+  {
+    "orderId": "94F7640A",
+    "quantity": 21,
+    "companyName": "Company B",
+    "address": "King St, Melbourne, VIC",
+    "country": "Australia",
+    "productCategory": "Meat",
+    "name": "Pork",
+    "price": 12.0
+  },
+  {
+    "orderId": "60480D8D",
+    "quantity": 19,
+    "companyName": "Company B",
+    "address": "King St, Melbourne, VIC",
+    "country": "Australia",
+    "productCategory": "Vegetable",
+    "name": "Broccoli",
+    "price": 1.3
+  },
+  {
+    "orderId": "BA87531F",
+    "quantity": 96,
+    "companyName": "Company B",
+    "address": "King St, Melbourne, VIC",
+    "country": "Australia",
+    "productCategory": "Grain",
+    "name": "Rice",
+    "price": 1.5
+  },
+  {
+    "orderId": "A243DD89",
+    "quantity": 74,
+    "companyName": "Company A",
+    "address": "Moore St, Liverpool, NSW",
+    "country": "Australia",
+    "productCategory": "Dairy",
+    "name": "Cheese",
+    "price": 3.0
+  },
+  {
+    "orderId": "E8078C01",
     "quantity": 120,
     "companyName": "Company B",
     "address": "King St, Melbourne, VIC",
     "country": "Australia",
     "productCategory": "Meat",
     "name": "Chicken",
-    "price": 15.2
+    "price": 10.5
   }
 ]
 ```
+The order list may be different because orders were created randomly.

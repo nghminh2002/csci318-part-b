@@ -61,7 +61,7 @@ public class DemoDataApplication {
         }
 
         Random random = new Random();
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 5; i++) {
             Long randomSupplierId = 1L + random.nextInt(2);
             Long randomProductId = 1L + random.nextInt(15);
             Integer randomQuantity = random.nextInt(100) + 1;
