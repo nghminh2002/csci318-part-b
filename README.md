@@ -4,39 +4,50 @@
 - CSCI318 - Software Engineering Practices & Principles
 - Session: Spring 2023
 
-### Project setup
+## Project setup
+This Spring Boot project uses Apache Kafka as a messaging platform.
+To run this project, you need to set up Kafka first.
 
-#### customer-account-bounded-context:
-```properties
-server.port=8080
-spring.h2.console.enabled=true
-spring.datasource.url=jdbc:h2:mem:testdb
+### Linux and MacOS
+Download a **binary package** of Apache Kafka (e.g., `kafka_2.13-2.8.0.tgz`) from
+[https://kafka.apache.org/downloads](https://kafka.apache.org/downloads)
+and upzip it.
+In the Terminal, `cd` to the unzip folder, and start Kakfa with the following commands (each in a separate Terminal session):
+```bash
+./bin/zookeeper-server-start.sh ./config/zookeeper.properties
 ```
-The console [http://localhost:8080/h2-console/](http://localhost:8080/h2-console/).
-To log on, change the value in the `JDBC URL` entry to `jdbc:h2:mem:testdb`.
-
-#### sales-bounded-context:
-```properties
-server.port=8081
-spring.h2.console.enabled=true
-spring.datasource.url=jdbc:h2:mem:testdb
+```bash
+./bin/kafka-server-start.sh ./config/server.properties
 ```
-The console [http://localhost:8081/h2-console/](http://localhost:8081/h2-console/).
-To log on, change the value in the `JDBC URL` entry to `jdbc:h2:mem:testdb`.
 
-#### procurement-bounded-context:
-```properties
-server.port=8082
-spring.h2.console.enabled=true
-spring.datasource.url=jdbc:h2:mem:testdb
+### Windows
+Download a **binary package** of Apache Kafka (e.g., `kafka_2.13-2.8.0.tgz`) from
+[https://kafka.apache.org/downloads](https://kafka.apache.org/downloads)
+and unzip it to a directory, e.g., `C:\kafka`&mdash;Windows does not like a complex path name (!).
+
+<!--
+In the configuration file `C:\kafka\config\zookeeper.properties`, comment out the line `"dataDir=/tmp/zookeeper"`. In `C:\kafka\config\server.properties`, change the line `"log.dirs=/tmp/kafka-logs"` to `"log.dirs=.kafka-logs"`.
+-->
+
+Use the following two commands in the Windows CMD (one in each window) to start Kafka:
+```bash
+C:\kafka\bin\windows\zookeeper-server-start.bat C:\kafka\config\zookeeper.properties
 ```
-The console [http://localhost:8082/h2-console/](http://localhost:8082/h2-console/).
-To log on, change the value in the `JDBC URL` entry to `jdbc:h2:mem:testdb`.
+```bash
+C:\kafka\bin\windows\kafka-server-start.bat C:\kafka\config\server.properties
+```
 
-### Patterns & Communications
+### Get Started
+**1. Start the Bounded Contexts:** Before proceeding, it's crucial to ensure that all four bounded contexts are running. This includes Customer Bounded Context, Sales Bounded Context, Order Bounded Context, and Analytics Bounded Context.
+
+**2. Run the Demo Data Project:** Once the bounded contexts are active, initiate the demo-data project. This will populate your application with demo data, ensuring it's structured correctly and ready for use.
+
+Please ensure you follow the above sequence to maintain data integrity and ensure the proper functioning of the system.
+
+## Use Case and API endpoints
 This version includes the entity, value object, aggregate, event and domain service patterns and communications between services. 
 
-#### I. customer-account-bounded-context
+### I. customer-account-bounded-context
 The __customer-account-bounded-context__ implements two ways of publishing and handling domain events which are enabled in Spring Boot, 
 i.e., the `AbstractAggregateRoot` generic class and the `ApplicationEventPublisher` interface. This also contains patterns 
 including entity, value object, aggregate, event and domain service.
@@ -170,7 +181,7 @@ which returns
 }
 ```
 
-#### II. sales-bounded-context
+### II. sales-bounded-context
 The __sales-bounded-context__ implements two ways of publishing and handling domain events which are enabled in Spring Boot,
 i.e., the `AbstractAggregateRoot` generic class and the `ApplicationEventPublisher` interface. This also contains patterns
 including entity, value object, aggregate, event and domain service.
@@ -290,7 +301,7 @@ which returns
 ]
 ```
 
-#### III. procurement-bounded-context
+### III. procurement-bounded-context
 The __procurement-bounded-context__ implements two ways of publishing and handling 
 domain events which are enabled in Spring Boot, i.e., the `AbstractAggregateRoot` generic class and the 
 `ApplicationEventPublisher` interface.

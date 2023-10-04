@@ -1,11 +1,29 @@
-spring.cloud.stream.bindings:
-  process-in-0:
-    destination: ordercreating
-spring.cloud.stream.kafka.streams.binder:
-  brokers: localhost:9092
-  serdeError: logAndContinue
-  configuration:
-    commit.interval.ms: 500
-    default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
-    default.value.serde: org.springframework.kafka.support.serializer.JsonSerde
-    spring.json.value.default.type: csci318.assignment.shareddomain.events.OrderCreatedEvent
+spring:
+  cloud:
+    function:
+      definition: processCustomer;processProduct;processOrder
+    stream:
+      bindings:
+        processCustomer-in-0:
+          destination: customercreating
+          group: analyticsGroup
+        processProduct-in-0:
+          destination: productcreating
+          group: analyticsGroup
+        processOrder-in-0:
+          destination: ordercreating
+          group: analyticsGroup
+      kafka:
+        streams:
+          binder:
+            brokers: localhost:9092
+            serdeError: logAndContinue
+            configuration:
+              commit.interval.ms: 500
+              default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+              order.value.serde: org.springframework.kafka.support.serializer.JsonSerde
+              customer.value.serde: org.springframework.kafka.support.serializer.JsonSerde
+              product.value.serde: org.springframework.kafka.support.serializer.JsonSerde
+              spring.json.value.default.type.order: csci318.assignment.shareddomain.events.OrderCreatedEvent
+              spring.json.value.default.type.customer: csci318.assignment.shareddomain.events.CustomerCreatedEvent
+              spring.json.value.default.type.product: csci318.assignment.shareddomain.events.ProductCreatedEvent

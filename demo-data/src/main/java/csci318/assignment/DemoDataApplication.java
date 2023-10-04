@@ -1,5 +1,7 @@
 package csci318.assignment;
 
+import csci318.assignment.dto.CustomerRequestDTO;
+import csci318.assignment.dto.CustomerResponseDTO;
 import csci318.assignment.dto.OrderRequestDTO;
 import csci318.assignment.dto.OrderResponseDTO;
 import csci318.assignment.dto.ProductRequestDTO;
@@ -14,9 +16,23 @@ public class DemoDataApplication {
 
     public static void main(String[] args) throws InterruptedException {
 
+        final String customerUrl = "http://localhost:8080/customer";
         final String productUrl = "http://localhost:8081/product";
         final String orderUrl = "http://localhost:8082/order";
         RestTemplate restTemplate = new RestTemplate();
+
+        CustomerRequestDTO[] customers = {
+                new CustomerRequestDTO("Company A", "Moore St, Liverpool, NSW", "Australia", "Hue Minh Nguyen", "0123456789", "hmn998@uowmail.edu.au", "Technical Support"),
+                new CustomerRequestDTO("Company B", "King St, Melbourne, VIC", "Australia", "Nguyen Hue Minh", "0987654321", "hmn998@gmail.com", "Software Engineer")
+        };
+
+        for (CustomerRequestDTO customer : customers) {
+            CustomerResponseDTO newCustomer = restTemplate.postForObject(customerUrl, customer, CustomerResponseDTO.class);
+            String message = String.format("Customer [ID = %s]: Company %s, Address %s,%s",
+                    newCustomer.getCustomerId(), newCustomer.getCompanyName(), newCustomer.getAddress(), newCustomer.getCountry());
+            System.out.println(message);
+            Thread.sleep(500);
+        }
 
         ProductRequestDTO[] products = {
                 new ProductRequestDTO("Meat", "Chicken", 10.5, "Free cage chicken", "Produced in Australia"),
@@ -34,11 +50,6 @@ public class DemoDataApplication {
                 new ProductRequestDTO("Vegetable", "Spinach", 1.2, "Fresh spinach", "Organic"),
                 new ProductRequestDTO("Dairy", "Yogurt", 1.8, "Greek yogurt", "Produced in Greece"),
                 new ProductRequestDTO("Grain", "Oats", 0.7, "Rolled oats", "Imported from Scotland"),
-                new ProductRequestDTO("Meat", "Lamb", 17.0, "Grass-fed lamb", "Sourced from New Zealand"),
-                new ProductRequestDTO("Fruit", "Strawberry", 1.4, "Red juicy strawberries", "Grown in California"),
-                new ProductRequestDTO("Vegetable", "Potato", 0.5, "Starchy potatoes", "Grown Locally"),
-                new ProductRequestDTO("Dairy", "Butter", 2.5, "Creamy unsalted butter", "Produced in Ireland"),
-                new ProductRequestDTO("Grain", "Corn", 0.8, "Sweet corn kernels", "Grown in USA"),
         };
 
         for (ProductRequestDTO product : products) {
@@ -52,7 +63,7 @@ public class DemoDataApplication {
         Random random = new Random();
         for (int i = 0; i < 30; i++) {
             Long randomSupplierId = 1L + random.nextInt(2);
-            Long randomProductId = 1L + random.nextInt(20);
+            Long randomProductId = 1L + random.nextInt(15);
             Integer randomQuantity = random.nextInt(100) + 1;
             OrderRequestDTO newOrderRequest = new OrderRequestDTO(randomSupplierId, randomProductId, randomQuantity);
             OrderResponseDTO newOrder = restTemplate.postForObject(orderUrl, newOrderRequest, OrderResponseDTO.class);
