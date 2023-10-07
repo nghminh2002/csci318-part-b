@@ -1,8 +1,10 @@
 package csci318.assignment.salesboundedcontext.interfaces.rest;
 
 import csci318.assignment.salesboundedcontext.application.internal.commandservices.ProductCommandService;
+import csci318.assignment.salesboundedcontext.application.internal.domainservices.ProductDomainService;
 import csci318.assignment.salesboundedcontext.application.internal.outboundservices.ExternalProductService;
 import csci318.assignment.salesboundedcontext.application.internal.queryservices.ProductQueryService;
+import csci318.assignment.salesboundedcontext.domain.model.commands.UpdateProductCommand;
 import csci318.assignment.salesboundedcontext.interfaces.rest.dto.OrderCustomerResponseDTO;
 import csci318.assignment.salesboundedcontext.interfaces.rest.dto.ProductOrderListResponseDTO;
 import csci318.assignment.salesboundedcontext.interfaces.rest.dto.ProductRequestDTO;
@@ -25,15 +27,18 @@ import java.util.stream.Collectors;
 @RequestMapping("/product")
 public class ProductController {
     private final ProductCommandService productCommandService;
+    private final ProductDomainService productDomainService;
     private final ProductQueryService productQueryService;
     private final ExternalProductService externalProductService;
 
     public ProductController(
             ProductCommandService productCommandService,
+            ProductDomainService productDomainService,
             ProductQueryService productQueryService,
             ExternalProductService externalProductService
     ) {
         this.productCommandService = productCommandService;
+        this.productDomainService = productDomainService;
         this.productQueryService = productQueryService;
         this.externalProductService = externalProductService;
     }
@@ -58,9 +63,14 @@ public class ProductController {
             @RequestBody ProductRequestDTO request
     ) {
         Product originalProduct = productQueryService.findByProductId(productId);
-        Product updatedProduct = productCommandService.updateProduct(
-                ProductCommandDTOAssembler.toCommandFromDTO(originalProduct, request)
+
+        UpdateProductCommand updateProductCommand =
+                ProductCommandDTOAssembler.toCommandFromDTO(originalProduct, request);
+        updateProductCommand.setProductDetail(
+                productDomainService.updateProductDetail(originalProduct.getProductDetail(), request)
         );
+        Product updatedProduct = productCommandService.updateProduct(updateProductCommand);
+
         return new ProductResponseDTO(updatedProduct);
     }
 

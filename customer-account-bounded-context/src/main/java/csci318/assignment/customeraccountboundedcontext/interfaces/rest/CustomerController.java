@@ -1,9 +1,11 @@
 package csci318.assignment.customeraccountboundedcontext.interfaces.rest;
 
 import csci318.assignment.customeraccountboundedcontext.application.internal.commandservices.CustomerCommandService;
+import csci318.assignment.customeraccountboundedcontext.application.internal.domainservices.CustomerDomainService;
 import csci318.assignment.customeraccountboundedcontext.application.internal.outboundservices.ExternalCustomerService;
 import csci318.assignment.customeraccountboundedcontext.application.internal.queryservices.CustomerQueryService;
 import csci318.assignment.customeraccountboundedcontext.domain.model.aggregates.Customer;
+import csci318.assignment.customeraccountboundedcontext.domain.model.commands.UpdateCustomerCommand;
 import csci318.assignment.customeraccountboundedcontext.interfaces.rest.dto.CustomerOrderHistoryDTO;
 import csci318.assignment.customeraccountboundedcontext.interfaces.rest.dto.CustomerRequestDTO;
 import csci318.assignment.customeraccountboundedcontext.interfaces.rest.dto.CustomerResponseDTO;
@@ -26,15 +28,18 @@ import java.util.stream.Collectors;
 public class CustomerController {
 
     private final CustomerCommandService customerCommandService;
+    private final CustomerDomainService customerDomainService;
     private final CustomerQueryService customerQueryService;
     private final ExternalCustomerService externalCustomerService;
 
     public CustomerController(
             CustomerCommandService customerCommandService,
+            CustomerDomainService customerDomainService,
             CustomerQueryService customerQueryService,
             ExternalCustomerService externalCustomerService
     ) {
         this.customerCommandService = customerCommandService;
+        this.customerDomainService = customerDomainService;
         this.customerQueryService = customerQueryService;
         this.externalCustomerService = externalCustomerService;
     }
@@ -59,9 +64,14 @@ public class CustomerController {
             @RequestBody CustomerRequestDTO request
     ) {
         Customer originalCustomer = customerQueryService.findByCustomerId(customerId);
-        Customer updatedCustomer =  customerCommandService.updateCustomer(
-                CustomerCommandDTOAssembler.toCommandFromDTO(originalCustomer, request)
+
+        UpdateCustomerCommand updateCustomerCommand = CustomerCommandDTOAssembler
+                .toCommandFromDTO(originalCustomer, request);
+        updateCustomerCommand.setContact(
+                customerDomainService.updateCustomerContact(originalCustomer.getContact(), request)
         );
+
+        Customer updatedCustomer =  customerCommandService.updateCustomer(updateCustomerCommand);
         return new CustomerResponseDTO(updatedCustomer);
     }
 

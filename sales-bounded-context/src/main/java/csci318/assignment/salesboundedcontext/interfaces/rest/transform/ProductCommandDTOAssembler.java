@@ -51,23 +51,6 @@ public class ProductCommandDTOAssembler {
             updateProductCommand.setPrice(originalProduct.getPrice());
         }
 
-        // 4. Check if the product detail needs to be updated
-        // If yes, replace old detail with the new detail
-        ProductDetail originProductDetail = originalProduct.getProductDetail();
-        if (request.getComment() != null || request.getDescription() != null) {
-            String newDescription = request.getDescription() != null
-                    ? request.getDescription()
-                    : originProductDetail.getDescription();
-            String newComment = request.getComment() != null
-                    ? request.getComment()
-                    : originProductDetail.getComment();
-            updateProductCommand.setProductDetail(
-                    new ProductDetail(newDescription, newComment)
-            );
-        } else {
-            updateProductCommand.setProductDetail(originProductDetail);
-        }
-
         return updateProductCommand;
     }
 }

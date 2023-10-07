@@ -54,32 +54,6 @@ public class CustomerCommandDTOAssembler {
             updateCustomerCommand.setCountry(originalCustomer.getCountry());
         }
 
-        // 4. Check if the contact needs to be updated
-        // If yes, replace old contact with the new contact
-        Contact originalContact = originalCustomer.getContact();
-        if (request.getName() != null ||
-                request.getPhone() != null ||
-                request.getEmail() != null ||
-                request.getPosition() != null
-        ) {
-            String newName = request.getName() != null
-                    ? request.getName()
-                    : originalContact.getName();
-            String newPhone = request.getPhone() != null
-                    ? request.getPhone()
-                    : originalContact.getPhone();
-            String newEmail = request.getEmail() != null
-                    ? request.getEmail()
-                    : originalContact.getEmail();
-            String newPosition = request.getPosition() != null
-                    ? request.getPosition()
-                    : originalContact.getPosition();
-            Contact newContact = new Contact(newName, newPhone, newEmail, newPosition);
-            updateCustomerCommand.setContact(newContact);
-        } else {
-            updateCustomerCommand.setContact(originalContact);
-        }
-
         return updateCustomerCommand;
     }
 }
