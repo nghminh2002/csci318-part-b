@@ -182,32 +182,32 @@ which may return
   "position": "Technical Support",
   "orderList": [
     {
-      "orderId": "974094A0",
+      "orderId": "ORDER071020230107511",
       "product": {
-        "id": 5,
-        "productCategory": "Grain",
-        "name": "Rice",
-        "price": 1.5,
+        "id": 7,
+        "productCategory": "Fruit",
+        "name": "Orange",
+        "price": 0.7,
         "productDetail": {
-          "description": "Long grain rice",
-          "comment": "Imported from Asia"
+          "description": "Juicy orange",
+          "comment": "Imported from Spain"
         }
       },
-      "quantity": 69
+      "quantity": 42
     },
     {
-      "orderId": "A243DD89",
+      "orderId": "ORDER071020230108641",
       "product": {
-        "id": 9,
-        "productCategory": "Dairy",
-        "name": "Cheese",
-        "price": 3.0,
+        "id": 8,
+        "productCategory": "Vegetable",
+        "name": "Broccoli",
+        "price": 1.3,
         "productDetail": {
-          "description": "Matured cheddar",
-          "comment": "Produced in France"
+          "description": "Green broccoli",
+          "comment": "Organic"
         }
       },
-      "quantity": 74
+      "quantity": 50
     }
   ]
 }
@@ -318,7 +318,7 @@ which may return
     "price": 1.2,
     "description": "Fresh milk",
     "comment": "Produced in Canada",
-    "numberOfCreatedOrders": 0
+    "numberOfCreatedOrders": 1
   },
   {
     "productId": 5,
@@ -327,7 +327,7 @@ which may return
     "price": 1.5,
     "description": "Long grain rice",
     "comment": "Imported from Asia",
-    "numberOfCreatedOrders": 2
+    "numberOfCreatedOrders": 0
   },
   {
     "productId": 6,
@@ -345,7 +345,7 @@ which may return
     "price": 0.7,
     "description": "Juicy orange",
     "comment": "Imported from Spain",
-    "numberOfCreatedOrders": 0
+    "numberOfCreatedOrders": 1
   },
   {
     "productId": 8,
@@ -363,7 +363,7 @@ which may return
     "price": 3.0,
     "description": "Matured cheddar",
     "comment": "Produced in France",
-    "numberOfCreatedOrders": 1
+    "numberOfCreatedOrders": 0
   },
   {
     "productId": 10,
@@ -381,7 +381,7 @@ which may return
     "price": 12.0,
     "description": "Organic pork",
     "comment": "Sourced from Germany",
-    "numberOfCreatedOrders": 1
+    "numberOfCreatedOrders": 0
   },
   {
     "productId": 12,
@@ -408,7 +408,7 @@ which may return
     "price": 1.8,
     "description": "Greek yogurt",
     "comment": "Produced in Greece",
-    "numberOfCreatedOrders": 0
+    "numberOfCreatedOrders": 1
   },
   {
     "productId": 15,
@@ -417,7 +417,7 @@ which may return
     "price": 0.7,
     "description": "Rolled oats",
     "comment": "Imported from Scotland",
-    "numberOfCreatedOrders": 0
+    "numberOfCreatedOrders": 1
   },
   {
     "productId": 16,
@@ -433,41 +433,25 @@ which may return
 The **numberOfCreatedOrders** may be different because orders were created randomly.
 
 #### 5. Get all created orders containing a product
-- get all created orders containing a product having `ID = 5`
+- get all created orders containing a product having `ID = 4`
 - communications:
   + communicate with procurement-bounded-context to get order data
   + procurement-bounded-context communicate with customer-account-bounded-context to get customer data
 ```shell
-curl -X GET http://localhost:8081/product/5/all-orders
+curl -X GET http://localhost:8081/product/4/all-orders
 ```
 which may return
 ```json
 {
-  "productId": 5,
-  "productCategory": "Grain",
-  "name": "Rice",
-  "price": 1.5,
-  "description": "Long grain rice",
-  "comment": "Imported from Asia",
+  "productId": 4,
+  "productCategory": "Dairy",
+  "name": "Milk",
+  "price": 1.2,
+  "description": "Fresh milk",
+  "comment": "Produced in Canada",
   "orderList": [
     {
-      "orderId": "974094A0",
-      "supplier": {
-        "id": 1,
-        "companyName": "Company A",
-        "address": "Moore St, Liverpool, NSW",
-        "country": "Australia",
-        "contact": {
-          "name": "Hue Minh Nguyen",
-          "phone": "0123456789",
-          "email": "hmn998@uowmail.edu.au",
-          "position": "Technical Support"
-        }
-      },
-      "quantity": 69
-    },
-    {
-      "orderId": "BA87531F",
+      "orderId": "ORDER071020230204665",
       "supplier": {
         "id": 2,
         "companyName": "Company B",
@@ -480,7 +464,7 @@ which may return
           "position": "Software Engineer"
         }
       },
-      "quantity": 96
+      "quantity": 32
     }
   ]
 }
@@ -507,7 +491,7 @@ curl -X POST -H "Content-Type:application/json" -d "{\"supplier\":2, \"product\"
 which may return
 ```json
 {
-  "orderId": "E8078C01",
+  "orderId": "ORDER071020230201648",
   "quantity": 12,
   "companyName": "Company B",
   "address": "King St, Melbourne, VIC",
@@ -534,7 +518,7 @@ now may return
   "comment": "Produced in Australia",
   "orderList": [
     {
-      "orderId": "E8078C01",
+      "orderId": "ORDER071020230201648",
       "supplier": {
         "id": 2,
         "companyName": "Company B",
@@ -571,49 +555,49 @@ now may return
   "position": "Software Engineer",
   "orderList": [
     {
-      "orderId": "94F7640A",
+      "orderId": "ORDER071020230215510",
       "product": {
-        "id": 11,
-        "productCategory": "Meat",
-        "name": "Pork",
-        "price": 12.0,
-        "productDetail": {
-          "description": "Organic pork",
-          "comment": "Sourced from Germany"
-        }
-      },
-      "quantity": 21
-    },
-    {
-      "orderId": "60480D8D",
-      "product": {
-        "id": 8,
-        "productCategory": "Vegetable",
-        "name": "Broccoli",
-        "price": 1.3,
-        "productDetail": {
-          "description": "Green broccoli",
-          "comment": "Organic"
-        }
-      },
-      "quantity": 19
-    },
-    {
-      "orderId": "BA87531F",
-      "product": {
-        "id": 5,
+        "id": 15,
         "productCategory": "Grain",
-        "name": "Rice",
-        "price": 1.5,
+        "name": "Oats",
+        "price": 0.7,
         "productDetail": {
-          "description": "Long grain rice",
-          "comment": "Imported from Asia"
+          "description": "Rolled oats",
+          "comment": "Imported from Scotland"
         }
       },
-      "quantity": 96
+      "quantity": 16
     },
     {
-      "orderId": "E8078C01",
+      "orderId": "ORDER071020230214894",
+      "product": {
+        "id": 14,
+        "productCategory": "Dairy",
+        "name": "Yogurt",
+        "price": 1.8,
+        "productDetail": {
+          "description": "Greek yogurt",
+          "comment": "Produced in Greece"
+        }
+      },
+      "quantity": 4
+    },
+    {
+      "orderId": "ORDER071020230204665",
+      "product": {
+        "id": 4,
+        "productCategory": "Dairy",
+        "name": "Milk",
+        "price": 1.2,
+        "productDetail": {
+          "description": "Fresh milk",
+          "comment": "Produced in Canada"
+        }
+      },
+      "quantity": 32
+    },
+    {
+      "orderId": "ORDER071020230201648",
       "product": {
         "id": 1,
         "productCategory": "Meat",
@@ -632,18 +616,18 @@ now may return
 A new order with has been added
 
 #### 2. Update order
-- update order having `ID = E8078C01`. This id may not exist because the orderId was generated randomly. It would be different from time to time.
+- update order having `ID = ORDER071020230201648`. This id may not exist because the orderId was generated randomly. It would be different from time to time.
 - event patterns: new **OrderUpdatedEvent** was created
 - communications:
   + communicate with customer-account-bounded-context to get customer data
   + communicate with sales-bounded-context to get product data
 ```shell
-curl -X PUT -H "Content-Type:application/json" -d "{\"quantity\": 120}" http://localhost:8082/order/E8078C01
+curl -X PUT -H "Content-Type:application/json" -d "{\"quantity\": 120}" http://localhost:8082/order/ORDER071020230201648
 ```
 which may return
 ```json
 {
-  "orderId": "E8078C01",
+  "orderId": "ORDER071020230201648",
   "quantity": 120,
   "companyName": "Company B",
   "address": "King St, Melbourne, VIC",
@@ -655,17 +639,17 @@ which may return
 ```
 
 #### 3. Get order by id
-- get order having `ID = E8078C01`. This id may not exist because the orderId was generated randomly. It would be different from time to time.
+- get order having `ID = ORDER071020230201648`. This id may not exist because the orderId was generated randomly. It would be different from time to time.
 - communications:
   + communicate with customer-account-bounded-context to get customer data
   + communicate with sales-bounded-context to get product data
 ```shell
-curl -X GET http://localhost:8082/order/E8078C01
+curl -X GET http://localhost:8082/order/ORDER071020230201648
 ```
 which may return
 ```json
 {
-  "orderId": "E8078C01",
+  "orderId": "ORDER071020230201648",
   "quantity": 120,
   "companyName": "Company B",
   "address": "King St, Melbourne, VIC",
@@ -687,57 +671,57 @@ which may return
 ```json
 [
   {
-    "orderId": "974094A0",
-    "quantity": 69,
+    "orderId": "ORDER071020230107511",
+    "quantity": 42,
     "companyName": "Company A",
     "address": "Moore St, Liverpool, NSW",
     "country": "Australia",
-    "productCategory": "Grain",
-    "name": "Rice",
-    "price": 1.5
+    "productCategory": "Fruit",
+    "name": "Orange",
+    "price": 0.7
   },
   {
-    "orderId": "94F7640A",
-    "quantity": 21,
+    "orderId": "ORDER071020230215510",
+    "quantity": 16,
     "companyName": "Company B",
     "address": "King St, Melbourne, VIC",
     "country": "Australia",
-    "productCategory": "Meat",
-    "name": "Pork",
-    "price": 12.0
+    "productCategory": "Grain",
+    "name": "Oats",
+    "price": 0.7
   },
   {
-    "orderId": "60480D8D",
-    "quantity": 19,
+    "orderId": "ORDER071020230214894",
+    "quantity": 4,
     "companyName": "Company B",
     "address": "King St, Melbourne, VIC",
+    "country": "Australia",
+    "productCategory": "Dairy",
+    "name": "Yogurt",
+    "price": 1.8
+  },
+  {
+    "orderId": "ORDER071020230204665",
+    "quantity": 32,
+    "companyName": "Company B",
+    "address": "King St, Melbourne, VIC",
+    "country": "Australia",
+    "productCategory": "Dairy",
+    "name": "Milk",
+    "price": 1.2
+  },
+  {
+    "orderId": "ORDER071020230108641",
+    "quantity": 50,
+    "companyName": "Company A",
+    "address": "Moore St, Liverpool, NSW",
     "country": "Australia",
     "productCategory": "Vegetable",
     "name": "Broccoli",
     "price": 1.3
   },
   {
-    "orderId": "BA87531F",
-    "quantity": 96,
-    "companyName": "Company B",
-    "address": "King St, Melbourne, VIC",
-    "country": "Australia",
-    "productCategory": "Grain",
-    "name": "Rice",
-    "price": 1.5
-  },
-  {
-    "orderId": "A243DD89",
-    "quantity": 74,
-    "companyName": "Company A",
-    "address": "Moore St, Liverpool, NSW",
-    "country": "Australia",
-    "productCategory": "Dairy",
-    "name": "Cheese",
-    "price": 3.0
-  },
-  {
-    "orderId": "E8078C01",
+    "orderId": "ORDER071020230201648",
     "quantity": 120,
     "companyName": "Company B",
     "address": "King St, Melbourne, VIC",
